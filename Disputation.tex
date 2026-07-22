@@ -23,13 +23,11 @@
 \usepackage{graphicx}
 \usepackage{tikz}
 \usepackage{geometry}
+\usetikzlibrary{positioning,calc,arrows.meta}
 
 \setbeamertemplate{navigation symbols}{}
 \setbeamertemplate{footline}[frame number]
 \geometry{left=1cm}
-
-% <<< ADAPT: figure search path(s) >>>
-\graphicspath{{Figs/}{../dissertation/figures/}} % <<< ADAPT
 
 \definecolor{Pone}{RGB}{83,74,183}    % P1 state space
 \definecolor{Ptwo}{RGB}{216,90,48}    % P2 observation space
@@ -70,10 +68,10 @@
      \scriptsize testbed: blocking \& WCBs};
   \node[panel, ponestyle] (p1) at (0,2.6)
     {\textbf{P1 $\cdot$ state space}\\
-     \scriptsize perturb the state};
+     \scriptsize perturb the systehm};
   \node[panel, ptwostyle] (p2) at (-4.6,-2.6)
     {\textbf{P2 $\cdot$ assimilation space}\\
-     \scriptsize perturb the observations \\ and parametrization};
+     \scriptsize perturb the observations \\ \scriptsize and parametrization};
   \node[panel, pthreestyle] (p3) at (4.6,-2.6)
     {\textbf{P3 $\cdot$ physical space}\\
      \scriptsize perturb the air parcels};
@@ -97,6 +95,18 @@
   \fi
 \end{tikzpicture}}
 
+% Preamble additions:
+% \usetikzlibrary{positioning,arrows.meta,calc}
+\definecolor{predcol}{RGB}{150,150,150}
+\definecolor{obscol}{RGB}{60,160,110}
+\definecolor{updcol}{RGB}{70,70,70}
+
+% x0, mu, sigma, amplitude, style
+\newcommand{\dens}[5]{%
+  \draw[#5] plot[domain={#2-3.0*#3}:{#2+3.0*#3}, samples=50,
+    variable=\y]
+    ({#1+#4*exp(-((\y-#2)*(\y-#2))/(2*#3*#3))},\y) -- cycle;}
+
 \author{Henry Schoeller}
 \title{Atmospheric Blocking and Warm Conveyor Belts:
        Mathematical Perspectives}
@@ -116,9 +126,9 @@
 \begin{frame}
   \titlepage
   \vspace{-1.0cm}
-\begin{center}
-\includegraphics[width=.25\textwidth]{../fu-logo-250708-CMYK-p.pdf} \hspace{1cm} \includegraphics[width=.25\textwidth]{../CRC1114_Logos/LOGO_GRUEN_RGB_CRC.pdf}
-\end{center}
+  \begin{center}
+    \includegraphics[width=.25\textwidth]{../fu-logo-250708-CMYK-p.pdf} \hspace{1cm} \includegraphics[width=.25\textwidth]{../CRC1114_Logos/LOGO_GRUEN_RGB_CRC.pdf}
+  \end{center}
 \end{frame}
 
 % WHY: why we should care about blocks.
@@ -133,7 +143,7 @@
   \only<2>{\includegraphics[scale=1]
     {../../../wp22a/figs/build_2_z.pdf}}%
   \only<3>{\includegraphics[scale=1]
-    {../../../wp22a/figs/build_3_precip.pdf}}%
+    {../../../wp22a/figs/build_3_mslp.pdf}}%
   \only<4>{\includegraphics[scale=1]
     {../../../wp22a/figs/build_4_satellite.pdf}}%
 \end{frame}
@@ -158,16 +168,16 @@
     \begin{column}{.4\textwidth}
       \textbf{Blocking}
       \begin{itemize}
-        \item High-impact, persistent weather regime
-        \item Challenging for models
-        \item Range of scales and processes
+        \item High-impact, persistent weather regime \pause
+        \item Challenging for models \pause
+        \item Range of scales and processes \pause
       \end{itemize}
       \bigskip
       \textbf{Warm conveyor belts}
       \begin{itemize}
-        \item Synoptic features responsible for heat and moisture transport
-        \item Amplifiers of forecast uncertainty
-        \item Diabatic influence on the large-scale flow
+        \item Synoptic features responsible for heat and moisture transport \pause
+        \item Amplifiers of forecast uncertainty \pause
+        \item Diabatic influence on the large-scale flow \pause
       \end{itemize}
     \end{column}
     \begin{column}{.6\textwidth}
@@ -196,43 +206,87 @@
 % PAPER 1 -- STATE SPACE (~6 min)
 % ============================================================
 
-% WHY: minimal model, concretely; committee knows CdV, but the
-%   framing "regimes as neighbourhoods of fixed points" is what
-%   the result needs.
-% SAY: "The Charney--DeVore model: barotropic flow in a channel
-%   over orography, truncated to six Fourier modes -- six
-%   coupled ODEs. Its claim to fame: two regimes. A zonal,
-%   jet-like state and a blocked state, each living near a
-%   fixed point of the dynamics. The stochastic version simply
-%   adds white noise to each component. The question: what
-%   does that noise do to how long the system stays blocked?"
+% WHY: establish the state-space picture before any dynamics.
+%   Build: (1) deterministic attractor alone, (2) fixed points
+%   marked via the right panel, (3) right panel becomes the
+%   stochastic attractor -- deterministic vs stochastic side by
+%   side, motivating "what does noise do to these regimes?"
+% SAY (1): "Paper one lives in state space. This is the
+%   attractor of the Charney--DeVore model -- every point a
+%   possible large-scale flow, the density showing where the
+%   system spends its time. Two lobes: two preferred regimes."
+% SAY (2): "Each lobe sits near an unstable fixed point -- the
+%   blocked state here, the zonal state here."
+% SAY (3): "Now add noise. Side by side: the deterministic
+%   attractor, and the stochastic one. It smears -- but the
+%   regime structure survives. The question of this paper: what
+%   does that noise do to how long the system stays in a
+%   regime?"
+\begin{frame}{Charney--DeVore: a paradigm for regime dynamics}
+  \centering
+  \hspace*{-1cm}
+  \begin{tikzpicture}[scale=16/15]
+    % --- LEFT panel: deterministic attractor, all states ---
+    \node[anchor=center,inner sep=0] (left)
+    {\includegraphics[scale=.75]
+      {fig/HistPlotsPC_nolabel.pdf}};
 
-% Use f1.3 from the thesis
+    % --- RIGHT panel: fixed points (2) then stochastic (3) ---
+    \only<2>{
+      \node[anchor=west,inner sep=0,right=6pt of left] (right)
+      {\includegraphics[scale=.75]
+        {fig/fixed_points_nolabel.pdf}};
+    }
 
-\begin{frame}{Regime dynamics reduce to a low-order system with
-              an unstable fixed point}
-  \begin{columns}
-    \begin{column}{.42\textwidth}
-      \begin{itemize}
-        \item Barotropic channel flow over orography,
-              6 spectral modes:
-              $\dot{\mathbf x} = f(\mathbf x)$
-        \item Two regimes: zonal and blocked, near two
-              unstable fixed points
-        \item Noise added:
-              $\dot{\mathbf x} = f(\mathbf x)
-               + \boldsymbol\xi_\sigma$
-      \end{itemize}
-    \end{column}
-    \begin{column}{.58\textwidth}
-      \centering
-      % <<< ADAPT: exists in paper-talk Figs/ >>>
-      % \includegraphics[scale=.4]{HistPlots.pdf}
-      % \includegraphics[scale=.4]{HistPlotsStoch.pdf}
-      \figplaceholder[.9\linewidth]{deterministic vs.\
-        stochastic attractor histograms + fixed points}
-    \end{column}
-  \end{columns}
+    \only<3>{
+    \node[anchor=west,inner sep=0,right=100pt of left] (right)
+    {\includegraphics[scale=.75]
+      {fig/HistPlotsPCStoch_nolabel.pdf}};
+    % <<< ADAPT: filename of the STOCHASTIC attractor figure.
+    \draw[-{Stealth[length=2.5mm]},thick]
+    (left.east) to[bend left=20]
+    node[above,midway,align=center,font=\footnotesize]
+      {$\dot{\mathbf x}=f(\mathbf x) +\boldsymbol{\xi}$}
+    node[below,midway,align=center,font=\footnotesize]
+      {$\boldsymbol{\xi} \sim \mathcal{N}(0,\sigma)$}
+    (right.west);
+    }
+
+    % Pinned points in the LEFT attractor (your calibration).
+    \coordinate (blockpt) at
+    ($(left.south west)!0.805!(left.south east)
+      !0.5375!($(left.north west)!0.805!(left.north east)$)$);
+    \coordinate (zonalpt) at
+    ($(left.south west)!0.27!(left.south east)
+      !0.5025!($(left.north west)!0.27!(left.north east)$)$);
+
+    % Fixed-point markers + leaders: only in state 2, where the
+    % right panel is the fixed-point figure.
+    \only<2>{
+      \fill[red]   (blockpt) circle (1.2pt);
+      \fill[black] (zonalpt) circle (1.2pt);
+
+      \coordinate (aTL) at
+      ($(right.north west)+(0.17cm,-0.55cm)$); % (a) blocking
+      \coordinate (bTL) at
+      ($(right.north west)+(0.17cm,-2.44cm)$); % (b) zonal
+      \def\subh{1.4cm}
+
+      \coordinate (blocksrc) at ($(aTL)+(0,-\subh)$);
+      \coordinate (zonalsrc) at ($(bTL)+(0,-\subh)$);
+
+      \draw[dashed,gray] (aTL) -- (blockpt);
+      \draw[dashed,gray] (bTL) -- (zonalpt);
+      \draw[dashed,gray] (blocksrc) -- (blockpt);
+      \draw[dashed,gray] (zonalsrc) -- (zonalpt);
+    }
+  \end{tikzpicture}
+\end{frame}
+
+\begin{frame}{}
+\centering
+\Huge
+\textbf{P1: Can we study the system's reaction to noise without access to the dynamics?}
 \end{frame}
 
 % WHY: the methodological contribution of P1 in one picture;
@@ -249,33 +303,33 @@
 %   expected time to escape the regime is then pure linear
 %   algebra on that chain -- no re-simulation, and in fact the
 %   governing equations never need to be known."
-\begin{frame}{One deterministic trajectory suffices to predict
-              the noisy regime lifetimes}
-  \textbf{Ansatz:} one deterministic step, one random step:
+
+% First show regime definitions, then show Monte Carlo curve only (need
+% to recreate figure for that), then switch to slide that explains
+% Markov chain ansatz, then switch back and show both curves.
+\begin{frame}{A Markov chain approach}
+  \textbf{Input:} (Deterministic) trajectory $\mathcal{X} = \{X_n\}_{n=1,\hdots, N}$\\
+  \textbf{Ansatz:} one deterministic step $T$, one random step $D(\sigma)$:
   \begin{equation*}
     P(\sigma) = T \circ D(\sigma), \qquad
     D(\sigma)_{ij} \sim
     \exp\!\left(-\tfrac{\lVert X_i - X_j\rVert^2}
-                       {2\sigma\,\dd t}\right)
+    {2\sigma\,\dd t}\right)
   \end{equation*}
-  \begin{columns}
-    \begin{column}{.55\textwidth}
-      \begin{itemize}
-        \item Expected escape time from regime $\mathcal M$:
-              linear algebra on $P(\sigma)$
-        \item No stochastic re-simulation; dynamics need not
-              be known
-      \end{itemize}
-    \end{column}
-    \begin{column}{.45\textwidth}
-      \centering
-      % <<< ADAPT: exists in paper-talk Figs/ >>>
-      % \includegraphics[width=.45\linewidth]{chain_deterministic.png}
-      % \includegraphics[width=.45\linewidth]{chain_stochastic.png}
-      \figplaceholder[.9\linewidth]{chain sketches:
-        deterministic vs.\ with noise}
-    \end{column}
-  \end{columns}
+  \only<2>{\centering \includegraphics[scale=.2]{fig/chain_stochastic.png}}
+\only<3->{\begin{columns}
+\begin{column}{.6\textwidth}
+\begin{itemize}
+\item<3-> Identification of regimes as almost-invariant sets of $P(\sigma)$
+\item<4-> Regime lifetimes: linear algebra on $P(\sigma)$
+\item<5-> No stochastic re-simulation; dynamics need not be known
+\end{itemize}
+\end{column}
+\begin{column}{.4\textwidth}
+\centering
+\includegraphics[scale=.2]{fig/chain_stochastic.png}
+\end{column}
+\end{columns}}
 \end{frame}
 
 % WHY: the headline result, with the mechanism and the
@@ -294,31 +348,42 @@
 %   unstable dimension. A toy system with three unstable
 %   directions shows no such effect; a forthcoming paper
 %   proves this in generality."
-\begin{frame}{Stochastic inertia: noise extends regime lifetime
-              --- one unstable dimension is the condition}
-  \begin{columns}
-    \begin{column}{.6\textwidth}
-      \centering
-      % <<< ADAPT: exists in paper-talk Figs/ >>>
-      % \includegraphics[width=\linewidth]{CdV_MeanRegimeLifetimeComparison_subsample_10_sigma_0.01.pdf}
-      \figplaceholder[.95\linewidth]{lifetime vs.\ noise:
-        Markov chain vs.\ Monte Carlo, maximum at
-        $\sigma^* > 0$}
-    \end{column}
-    \begin{column}{.4\textwidth}
-      \begin{itemize}
-        \item Lifetime maximal at $\sigma^* > 0$:
-              increase by [X] % <<< NUMBER
-        \item Mechanism: slow-then-fast escape along
-              \emph{one} unstable direction
-        \item 3 unstable dimensions $\Rightarrow$ no effect
-      \end{itemize}
-    \end{column}
-  \end{columns}
-  \par\smallskip
+\begin{frame}{Regime dynamics and noise}
+  \only<1>{\centering \includegraphics[scale=.75]{fig/Sets_subsample_10_sigma_0.01_no_label.pdf}}
+  \only<2>{
+    \centering 
+    \includegraphics[scale=.75]{fig/Sets_subsample_10_sigma_0.01_no_label.pdf}
+    \includegraphics[scale=.75]{fig/CdV_MeanRegimeLifetimeComparison_10_0.01_nolabel_1.pdf}
+  }
+  \only<3->{
+    \centering 
+    \includegraphics[scale=.75]{fig/Sets_subsample_10_sigma_0.01_no_label.pdf}
+    \includegraphics[scale=.75]{fig/CdV_MeanRegimeLifetimeComparison_10_0.01_nolabel_2.pdf}\\}
+    \only<4->{\begin{itemize}
+      \item Escape along \emph{single} unstable direction can be slowed by noise
+      \item Effect amplified by state space exploration
+    \end{itemize}
+      \par\smallskip
   {\scriptsize Schoeller et al., Commun.\ Appl.\ Math.\
-   Comput.\ Sci.\ (in review), arXiv:2604.27991}
+    Comput.\ Sci.\ (in press), arXiv:2604.27991}
+  }
 \end{frame}
+
+  % \begin{columns}
+  %   \begin{column}{.6\textwidth}
+  %     \centering
+  %     \includegraphics[scale=.75]{fig/Sets_subsample_10_sigma_0.01_no_label.pdf}
+  %   \end{column}
+  %   \begin{column}{.4\textwidth}
+  %     \begin{itemize}
+  %       \item Lifetime maximal at $\sigma^* > 0$:
+  %             increase by [X] % <<< NUMBER
+  %       \item Mechanism: slow-then-fast escape along
+  %             \emph{one} unstable direction
+  %       \item 3 unstable dimensions $\Rightarrow$ no effect
+  %     \end{itemize}
+  %   \end{column}
+  % \end{columns}
 
 % WHY: takeaway + light the first panel + spoken transition.
 % SAY: "So: perturb the trajectory, and persistence turns out
@@ -327,8 +392,7 @@
 %   idealised world with noise we chose ourselves. In the real
 %   atmosphere: what IS that noise -- and how well do we even
 %   know the state we start from?"
-\begin{frame}{Perturb the trajectory $\rightarrow$ persistence
-              is a property of the unstable geometry}
+\begin{frame}{}
   \centering
   \synthstate{1}
 \end{frame}
@@ -336,6 +400,102 @@
 % ============================================================
 % PAPER 2 -- OBSERVATION SPACE (~7 min)
 % ============================================================
+
+% WHY: teach the DA cycle and its three uncertainty sources in
+%   one picture, for a room where not everyone is a DA person.
+% SAY: "A forecast needs an initial state, but we never observe
+%   the atmosphere fully. Data assimilation combines what we do
+%   observe with a short-range forecast -- the background -- to
+%   estimate it. Three things make that estimate uncertain: the
+%   observations carry error and don't cover everything, and the
+%   model that propagated the background has error of its own.
+%   ERA5 quantifies this by running the whole cycle ten times
+%   with perturbed observations. The spread of that ensemble is
+%   my object of study."
+\begin{frame}{Forecasts start from an uncertain state}
+  \centering
+  \begin{tikzpicture}[
+      box/.style={draw, rounded corners, align=center,
+                  font=\small, minimum height=.85cm,
+                  minimum width=2.4cm},
+      src/.style={align=center, font=\scriptsize,
+                  text=gray!60!black},
+      arr/.style={-{Stealth[length=2mm]}, thick}]
+
+    \node[box] (obs) at (-2.6,1.4) {Observations};
+    \node[box] (bg)  at ( 2.6,1.4) {Background};
+    \node[box] (ana) at ( 0,-0.4) {Analysis};
+
+    \node[src] (obsunc) at (-2.6,3.0)
+      {uncertainty $\cdot$ coverage};
+    \node[src] (mdlunc) at ( 2.6,3.0) {model error};
+    \draw[gray, dashed] (obsunc) -- (obs);
+    \draw[gray, dashed] (mdlunc) -- (bg);
+
+    \draw[arr] (obs) -- (ana);
+    \draw[arr] (bg)  -- (ana);
+    \draw[arr] (ana.east) to[bend right=55]
+      node[right, font=\scriptsize, align=left, xshift=2pt]
+      {short-range\\ forecast} (bg.south);
+
+    \coordinate (fan) at (0,-1.4);
+    \draw[arr] (ana) -- (fan);
+    \foreach \a/\o in {28/0.35, 14/0.65, 0/1, -14/0.65, -28/0.35}{
+      \draw[gray, opacity=\o, thick] (fan) -- ++({270+\a}:1.5);
+    }
+    \node[src, anchor=north west] at (1.0,-2.2)
+      {ensemble spread};
+  \end{tikzpicture}
+\end{frame}
+
+\begin{frame}{Forecasts start from an uncertain state}
+  \centering
+  \begin{tikzpicture}[x=1.15cm, y=1.05cm, font=\small,
+      pred/.style={draw=predcol, fill=predcol!18},
+      obs/.style={draw=obscol!80!black, fill=obscol, opacity=.75},
+      upd/.style={draw=updcol, fill=updcol!75, opacity=.85}]
+
+    \draw[-{Stealth[length=2mm]}, gray] (-0.4,1.4) -- (8.9,1.4);
+    \foreach \t/\lab in {0/$t_0$, 1.6/$t_1$, 3.2/$t_2$,
+                         4.8/$t_3$, 6.4/$t_4$, 8.0/$t_5$}{
+      \node[font=\scriptsize, anchor=north] at (\t,1.35) {\lab};
+    }
+
+    % --- 1: model predictions ---
+    \dens{0}{2.50}{0.28}{0.43}{pred}
+    \dens{1.6}{3.05}{0.45}{0.27}{pred}
+    \dens{3.2}{3.25}{0.45}{0.27}{pred}
+    \dens{4.8}{3.45}{0.45}{0.27}{pred}
+    \dens{6.4}{3.65}{0.50}{0.24}{pred}
+    \dens{8.0}{3.95}{0.58}{0.21}{pred}
+
+    % --- 2: observations ---
+    \only<2->{
+      \dens{1.6}{2.62}{0.24}{0.50}{obs}
+      \dens{3.2}{2.85}{0.24}{0.50}{obs}
+      \dens{4.8}{3.05}{0.24}{0.50}{obs}
+    }
+
+    % --- 3: analyses ---
+    \only<3->{
+      \dens{1.6}{2.72}{0.20}{0.60}{upd}
+      \dens{3.2}{2.95}{0.20}{0.60}{upd}
+      \dens{4.8}{3.15}{0.20}{0.60}{upd}
+      \draw[obscol, dashed, thick] plot[smooth]
+        coordinates {(0,2.55) (1.6,2.75) (3.2,2.95) (4.8,3.15)
+                     (6.4,3.35) (8.0,3.55)};
+    }
+
+    % --- 4: coverage ---
+    \only<4>{
+      \draw[gray!50!black, thick, dotted]
+        (6.4,2.6) ellipse (0.55 and 1.5);
+      \node[anchor=north, align=center, font=\scriptsize,
+            text=gray!50!black] at (6.6,1.05)
+        {no observations:\\ uncertainty not reduced};
+    }
+  \end{tikzpicture}
+\end{frame}
 
 % WHY: teach EDA in 40 seconds; install the toolkit link
 %   ("noise in observation space").
@@ -352,7 +512,7 @@
 %   weather. The question: WHAT is it about the flow that
 %   drives it?"
 \begin{frame}{ERA5's ensemble of data assimilations explores
-              the analysis neighbourhood through noise}
+    the analysis neighbourhood through noise}
   \begin{columns}
     \begin{column}{.5\textwidth}
       \begin{itemize}
@@ -387,7 +547,7 @@
 %   we control the false discovery rate. What I show you next
 %   survives both."
 \begin{frame}{Attributing spread to flow features requires
-              inference that respects dependence}
+    inference that respects dependence}
   \begin{itemize}
     \item Per grid point: spread $\sim$ WCB activity
           $+$ weather regime $+$ seasonal cycle
@@ -413,7 +573,7 @@
 %   use and where the assimilation is least certain. So the
 %   least-known air is the air that feeds the block."
 \begin{frame}{Assimilation uncertainty peaks upstream of
-              blocks, in WCB air --- not in the block itself}
+    blocks, in WCB air --- not in the block itself}
   \centering
   % <<< ADAPT: key EMM / map figure, 16:9 re-export >>>
   \figplaceholder{EMM map: spread vs.\ WCB activity;
@@ -438,7 +598,7 @@
 %   vectors -- with the unstable directions -- precisely
 %   because observation-driven spread does not fill them."
 \begin{frame}{Regime dependence exists --- but spread does not
-              project onto the unstable directions}
+    project onto the unstable directions}
   \begin{columns}
     \begin{column}{.55\textwidth}
       \centering
@@ -465,8 +625,8 @@
 %   next question is material: what is that air actually
 %   DOING?"
 \begin{frame}{Perturb the observations $\rightarrow$
-              flow-dependent uncertainty, independent of the
-              unstable subspace}
+    flow-dependent uncertainty, independent of the
+    unstable subspace}
   \centering
   \synthstate{2}
 \end{frame}
@@ -483,7 +643,7 @@
 %   flushing air straight through. Indices cannot tell them
 %   apart; trajectories can."
 \begin{frame}{Eulerian indices see the flow; they do not see
-              the air masses}
+    the air masses}
   \begin{columns}
     \begin{column}{.5\textwidth}
       \centering
@@ -512,7 +672,7 @@
 %   as the Markov chain of paper one. Robustness to noise is
 %   the DEFINITION of the object, not a nuisance to control."
 \begin{frame}{Coherent sets: air streams defined by robustness
-              to perturbation of parcel positions}
+    to perturbation of parcel positions}
   \begin{itemize}
     \item Advect parcel ensemble; perturb positions with
           noise $\varepsilon$
@@ -526,7 +686,7 @@
   \figplaceholder{coherent-set construction sketch}
   \par\smallskip
   {\scriptsize Schoeller et al., Nonlin.\ Processes Geophys.\
-   32, 51 (2025)} % <<< ADAPT: confirm citation form
+    32, 51 (2025)} % <<< ADAPT: confirm citation form
 \end{frame}
 
 % WHY: headline P3; the life-cycle narrative, concretely on
@@ -543,7 +703,7 @@
 %   traced air masses drops. The material anatomy anticipates
 %   the death of the block."
 \begin{frame}{The coherent air masses' dimension tracks the
-              block life cycle --- breakdown accompanies decay}
+    block life cycle --- breakdown accompanies decay}
   \centering
   % <<< ADAPT: central clustering / life-cycle figure >>>
   \figplaceholder{coherent sets through onset / maturity /
@@ -560,7 +720,7 @@
 %   same dimension-persistence connection we met in state
 %   space, now in physical space."
 \begin{frame}{Perturb the air parcels $\rightarrow$ blocks have
-              a material anatomy}
+    a material anatomy}
   \centering
   \synthstate{3}
 \end{frame}
@@ -584,7 +744,7 @@
 %   high-dimensional estimation, became a lens; noise, usually
 %   the nuisance corrupting forecasts, became a probe."
 \begin{frame}{One toolkit, three spaces: noise as probe,
-              dimension as lens}
+    dimension as lens}
   \centering
   \synthstate{4}
 \end{frame}
@@ -625,7 +785,7 @@
 %   fails; and coherent sets are agnostic to the space they
 %   act in -- state space is next."
 \begin{frame}{The deterministic trajectory anticipates the
-              stochastic response --- the only handle we have}
+    stochastic response --- the only handle we have}
   \begin{itemize}
     \item Do SPPT/SPP excite the unstable subspace? Now
           testable
@@ -668,9 +828,9 @@
   \textbf{Ansatz:} one deterministic step $T$, one random step
   $D(\sigma)$:
   \begin{align*}
-    P(\sigma) &= T \circ D(\sigma), &
+    P(\sigma) & = T \circ D(\sigma),                                 &
     \left[P(\sigma)\right]_{ij}
-      &= \mathbb P\left(x_{n+1} = X_j \mid x_n = X_i\right)
+              & = \mathbb P\left(x_{n+1} = X_j \mid x_n = X_i\right)
   \end{align*}
   $Q(\sigma)$: restriction of $P(\sigma)$ to $\mathcal M$:
   \begin{align*}
