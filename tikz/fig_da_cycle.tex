@@ -1,0 +1,133 @@
+% ============================================================
+% fig_da_cycle.tex -- assimilation-cycle schematic
+%
+% Provides \dacyclefigure (a tikzpicture, no frame), sized for
+% a .55\textwidth column at natural size -- do NOT wrap it in
+% \resizebox, or the labels stop matching the body text.
+%
+% Overlays:
+%   \dacycleoverlayson    9-step build (default)
+%   \dacycleoverlaysoff   everything at once, single slide
+% Set before calling \dacyclefigure.
+%
+% Label size: \renewcommand{\dacyclefont}{\small} etc.
+%
+% Include with:  \input{fig_da_cycle}   (NOT \include)
+% Requires:      \usepackage{tikz}
+%                \usetikzlibrary{arrows.meta}
+% ============================================================
+
+\providecommand{\dacycleoverlays}{1}
+\providecommand{\dacycleoverlayson}{\renewcommand{\dacycleoverlays}{1}}
+\providecommand{\dacycleoverlaysoff}{\renewcommand{\dacycleoverlays}{0}}
+\providecommand{\dacyclefont}{\footnotesize}
+
+% \dastep{overlay spec}{content}
+\providecommand{\dastep}[2]{%
+  \ifnum\dacycleoverlays=1 \only<#1>{#2}\else{#2}\fi}
+
+\definecolor{fccol}{RGB}{220,50,40}
+\definecolor{anacol}{RGB}{45,110,210}
+\definecolor{obscol}{RGB}{20,120,90}
+
+% \ebar{x}{y}{half-height}{colour}
+\providecommand{\ebar}[4]{%
+  \draw[#4, thick] (#1,{#2-#3}) -- (#1,{#2+#3});
+  \draw[#4, thick] ({#1-0.09},{#2-#3}) -- ({#1+0.09},{#2-#3});
+  \draw[#4, thick] ({#1-0.09},{#2+#3}) -- ({#1+0.09},{#2+#3});}
+
+% \anastep{x}{y}{half-height}
+\providecommand{\anastep}[3]{%
+  \ebar{#1}{#2}{#3}{anacol}
+  \fill[anacol] ({#1-0.085},{#2-0.045})
+  rectangle ({#1+0.085},{#2+0.045});}
+
+\providecommand{\dacyclefigure}{%
+  \begin{tikzpicture}[x=0.73cm, y=1.60cm, font=\dacyclefont,
+    fcline/.style={fccol, thick, -{Stealth[length=1.6mm]}},
+    fcband/.style={fccol, thin, dashed, opacity=.85}]
+
+    \draw[-{Stealth[length=1.8mm]}, gray]
+    (1.7,1.15) -- (9.9,1.15);
+    \node[anchor=north east] at (9.9,1.08) {time};
+    \draw[-{Stealth[length=1.8mm]}, gray]
+    (1.7,1.15) -- (1.7,3.95);
+    \node[rotate=90, anchor=south] at (1.30,2.55) {state};
+
+    % --- 1: truth + assimilation windows ---
+    \foreach \t in {2,4,6,8}{
+        \draw[gray!55, dashed] (\t,1.2) -- (\t,3.72);
+      }
+    \draw[black, thick, dashed] plot[smooth]
+    coordinates {(2,2.35) (3,2.70) (4,2.75) (5,2.40)
+        (6,2.00) (7,1.85) (8,2.20) (8.8,2.48)
+        (9.4,2.60)};
+    \node[anchor=north west] at (2.05,2.16) {truth};
+
+    % --- 2: observations ---
+    \dastep{2-}{%
+      \foreach \x/\y/\e in {3.1/2.60/0.12, 3.7/2.90/0.12,
+          5.2/2.25/0.28, 5.7/2.15/0.28,
+          8.5/2.60/0.12}{
+          \ebar{\x}{\y}{\e}{obscol}
+          \fill[obscol] (\x,\y) circle (1.9pt);
+        }
+      \node[obscol, anchor=north] at (5.45,1.72)
+      {observations};
+    }
+
+    % --- 3: forecast, window 1 ---
+    \dastep{3-}{%
+      \draw[fcline] plot[smooth] coordinates
+        {(2,2.30) (2.7,2.55) (3.4,2.85) (4,3.05)};
+      \draw[fcband] plot[smooth] coordinates
+        {(2,2.40) (2.7,2.72) (3.4,3.11) (4,3.38)};
+      \draw[fcband] plot[smooth] coordinates
+        {(2,2.20) (2.7,2.38) (3.4,2.59) (4,2.72)};
+      \node[fccol, anchor=south west] at (2.2,3.60)
+      {model forecast};
+    }
+
+    % --- 4: analysis, end of window 1 ---
+    \dastep{4-}{%
+      \anastep{4}{2.70}{0.10}
+      \node[anacol, anchor=south west] at (4.15,2.80)
+      {analysis};
+    }
+
+    % --- 5: forecast, window 2 ---
+    \dastep{5-}{%
+      \draw[fcline] plot[smooth] coordinates
+        {(4,2.70) (4.7,2.65) (5.4,2.50) (6,2.35)};
+      \draw[fcband] plot[smooth] coordinates
+        {(4,2.80) (4.7,2.82) (5.4,2.76) (6,2.68)};
+      \draw[fcband] plot[smooth] coordinates
+        {(4,2.60) (4.7,2.48) (5.4,2.24) (6,2.02)};
+    }
+
+    % --- 6: analysis, end of window 2 ---
+    \dastep{6-}{\anastep{6}{2.15}{0.20}}
+
+    % --- 7: forecast, window 3 ---
+    \dastep{7-}{%
+      \draw[fcline] plot[smooth] coordinates
+        {(6,2.15) (6.7,2.22) (7.4,2.38) (8,2.50)};
+      \draw[fcband] plot[smooth] coordinates
+        {(6,2.35) (6.7,2.49) (7.4,2.72) (8,2.90)};
+      \draw[fcband] plot[smooth] coordinates
+        {(6,1.95) (6.7,1.95) (7.4,2.04) (8,2.10)};
+    }
+
+    % --- 8: analysis, end of window 3 ---
+    \dastep{8-}{\anastep{8}{2.50}{0.38}}
+
+    % --- 9: forecast from the uncertain analysis ---
+    \dastep{9-}{%
+      \draw[fcline] plot[smooth] coordinates
+        {(8,2.50) (8.5,2.65) (9.0,2.82) (9.4,2.92)};
+      \draw[fcband] plot[smooth] coordinates
+        {(8,2.88) (8.5,3.09) (9.0,3.33) (9.4,3.48)};
+      \draw[fcband] plot[smooth] coordinates
+        {(8,2.12) (8.5,2.21) (9.0,2.31) (9.4,2.36)};
+    }
+  \end{tikzpicture}}

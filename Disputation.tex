@@ -95,17 +95,7 @@
   \fi
 \end{tikzpicture}}
 
-% Preamble additions:
-% \usetikzlibrary{positioning,arrows.meta,calc}
-\definecolor{predcol}{RGB}{150,150,150}
-\definecolor{obscol}{RGB}{60,160,110}
-\definecolor{updcol}{RGB}{70,70,70}
-
-% x0, mu, sigma, amplitude, style
-\newcommand{\dens}[5]{%
-  \draw[#5] plot[domain={#2-3.0*#3}:{#2+3.0*#3}, samples=50,
-    variable=\y]
-    ({#1+#4*exp(-((\y-#2)*(\y-#2))/(2*#3*#3))},\y) -- cycle;}
+\input{tikz/fig_da_cycle}   % in the preamble
 
 \author{Henry Schoeller}
 \title{Atmospheric Blocking and Warm Conveyor Belts:
@@ -135,18 +125,18 @@
 % SAY: "But to illustrate why investigating blocks is important, I want to call
 %   back into memory an illustrative example of an impactful atmospheric
 %   blocking event---the heat wave Europe experienced this June."
-\begin{frame}{June 2026 heat wave}
-  \centering
-  \hspace*{-1cm}
-  \only<1>{\includegraphics[scale=1]
-    {../../../wp22a/figs/build_1_temp.pdf}}%
-  \only<2>{\includegraphics[scale=1]
-    {../../../wp22a/figs/build_2_z.pdf}}%
-  \only<3>{\includegraphics[scale=1]
-    {../../../wp22a/figs/build_3_mslp.pdf}}%
-  \only<4>{\includegraphics[scale=1]
-    {../../../wp22a/figs/build_4_satellite.pdf}}%
-\end{frame}
+% \begin{frame}{June 2026 heat wave}
+%   \centering
+%   \hspace*{-1cm}
+%   \only<1>{\includegraphics[scale=1]
+%     {../../../wp22a/figs/build_1_temp.pdf}}%
+%   \only<2>{\includegraphics[scale=1]
+%     {../../../wp22a/figs/build_2_z.pdf}}%
+%   \only<3>{\includegraphics[scale=1]
+%     {../../../wp22a/figs/build_3_mslp.pdf}}%
+%   \only<4>{\includegraphics[scale=1]
+%     {../../../wp22a/figs/build_4_satellite.pdf}}%
+% \end{frame}
 
 % WHY: generalize from the June 2026 case to the phenomena
 %   themselves; introduce WCBs as a first-class protagonist,
@@ -284,9 +274,9 @@
 \end{frame}
 
 \begin{frame}{}
-\centering
-\Huge
-\textbf{P1: Can we study the system's reaction to noise without access to the dynamics?}
+  \centering
+  \Huge
+  \textbf{P1: Can we study the system's reaction to noise without access to the dynamics?}
 \end{frame}
 
 % WHY: the methodological contribution of P1 in one picture;
@@ -317,19 +307,19 @@
     {2\sigma\,\dd t}\right)
   \end{equation*}
   \only<2>{\centering \includegraphics[scale=.2]{fig/chain_stochastic.png}}
-\only<3->{\begin{columns}
-\begin{column}{.6\textwidth}
-\begin{itemize}
-\item<3-> Identification of regimes as almost-invariant sets of $P(\sigma)$
-\item<4-> Regime lifetimes: linear algebra on $P(\sigma)$
-\item<5-> No stochastic re-simulation; dynamics need not be known
-\end{itemize}
-\end{column}
-\begin{column}{.4\textwidth}
-\centering
-\includegraphics[scale=.2]{fig/chain_stochastic.png}
-\end{column}
-\end{columns}}
+  \only<3->{\begin{columns}
+      \begin{column}{.6\textwidth}
+        \begin{itemize}
+          \item<3-> Identification of regimes as almost-invariant sets of $P(\sigma)$
+          \item<4-> Regime lifetimes: linear algebra on $P(\sigma)$
+          \item<5-> No stochastic re-simulation; dynamics need not be known
+        \end{itemize}
+      \end{column}
+      \begin{column}{.4\textwidth}
+        \centering
+        \includegraphics[scale=.2]{fig/chain_stochastic.png}
+      \end{column}
+    \end{columns}}
 \end{frame}
 
 % WHY: the headline result, with the mechanism and the
@@ -351,39 +341,39 @@
 \begin{frame}{Regime dynamics and noise}
   \only<1>{\centering \includegraphics[scale=.75]{fig/Sets_subsample_10_sigma_0.01_no_label.pdf}}
   \only<2>{
-    \centering 
+    \centering
     \includegraphics[scale=.75]{fig/Sets_subsample_10_sigma_0.01_no_label.pdf}
     \includegraphics[scale=.75]{fig/CdV_MeanRegimeLifetimeComparison_10_0.01_nolabel_1.pdf}
   }
   \only<3->{
-    \centering 
+    \centering
     \includegraphics[scale=.75]{fig/Sets_subsample_10_sigma_0.01_no_label.pdf}
     \includegraphics[scale=.75]{fig/CdV_MeanRegimeLifetimeComparison_10_0.01_nolabel_2.pdf}\\}
-    \only<4->{\begin{itemize}
+  \only<4->{\begin{itemize}
       \item Escape along \emph{single} unstable direction can be slowed by noise
       \item Effect amplified by state space exploration
     \end{itemize}
-      \par\smallskip
-  {\scriptsize Schoeller et al., Commun.\ Appl.\ Math.\
-    Comput.\ Sci.\ (in press), arXiv:2604.27991}
+    \par\smallskip
+    {\scriptsize Schoeller et al., Commun.\ Appl.\ Math.\
+      Comput.\ Sci.\ (in press), arXiv:2604.27991}
   }
 \end{frame}
 
-  % \begin{columns}
-  %   \begin{column}{.6\textwidth}
-  %     \centering
-  %     \includegraphics[scale=.75]{fig/Sets_subsample_10_sigma_0.01_no_label.pdf}
-  %   \end{column}
-  %   \begin{column}{.4\textwidth}
-  %     \begin{itemize}
-  %       \item Lifetime maximal at $\sigma^* > 0$:
-  %             increase by [X] % <<< NUMBER
-  %       \item Mechanism: slow-then-fast escape along
-  %             \emph{one} unstable direction
-  %       \item 3 unstable dimensions $\Rightarrow$ no effect
-  %     \end{itemize}
-  %   \end{column}
-  % \end{columns}
+% \begin{columns}
+%   \begin{column}{.6\textwidth}
+%     \centering
+%     \includegraphics[scale=.75]{fig/Sets_subsample_10_sigma_0.01_no_label.pdf}
+%   \end{column}
+%   \begin{column}{.4\textwidth}
+%     \begin{itemize}
+%       \item Lifetime maximal at $\sigma^* > 0$:
+%             increase by [X] % <<< NUMBER
+%       \item Mechanism: slow-then-fast escape along
+%             \emph{one} unstable direction
+%       \item 3 unstable dimensions $\Rightarrow$ no effect
+%     \end{itemize}
+%   \end{column}
+% \end{columns}
 
 % WHY: takeaway + light the first panel + spoken transition.
 % SAY: "So: perturb the trajectory, and persistence turns out
@@ -401,101 +391,8 @@
 % PAPER 2 -- OBSERVATION SPACE (~7 min)
 % ============================================================
 
-% WHY: teach the DA cycle and its three uncertainty sources in
-%   one picture, for a room where not everyone is a DA person.
-% SAY: "A forecast needs an initial state, but we never observe
-%   the atmosphere fully. Data assimilation combines what we do
-%   observe with a short-range forecast -- the background -- to
-%   estimate it. Three things make that estimate uncertain: the
-%   observations carry error and don't cover everything, and the
-%   model that propagated the background has error of its own.
-%   ERA5 quantifies this by running the whole cycle ten times
-%   with perturbed observations. The spread of that ensemble is
-%   my object of study."
-\begin{frame}{Forecasts start from an uncertain state}
-  \centering
-  \begin{tikzpicture}[
-      box/.style={draw, rounded corners, align=center,
-                  font=\small, minimum height=.85cm,
-                  minimum width=2.4cm},
-      src/.style={align=center, font=\scriptsize,
-                  text=gray!60!black},
-      arr/.style={-{Stealth[length=2mm]}, thick}]
+\input{tikz/fig_da_cycle}
 
-    \node[box] (obs) at (-2.6,1.4) {Observations};
-    \node[box] (bg)  at ( 2.6,1.4) {Background};
-    \node[box] (ana) at ( 0,-0.4) {Analysis};
-
-    \node[src] (obsunc) at (-2.6,3.0)
-      {uncertainty $\cdot$ coverage};
-    \node[src] (mdlunc) at ( 2.6,3.0) {model error};
-    \draw[gray, dashed] (obsunc) -- (obs);
-    \draw[gray, dashed] (mdlunc) -- (bg);
-
-    \draw[arr] (obs) -- (ana);
-    \draw[arr] (bg)  -- (ana);
-    \draw[arr] (ana.east) to[bend right=55]
-      node[right, font=\scriptsize, align=left, xshift=2pt]
-      {short-range\\ forecast} (bg.south);
-
-    \coordinate (fan) at (0,-1.4);
-    \draw[arr] (ana) -- (fan);
-    \foreach \a/\o in {28/0.35, 14/0.65, 0/1, -14/0.65, -28/0.35}{
-      \draw[gray, opacity=\o, thick] (fan) -- ++({270+\a}:1.5);
-    }
-    \node[src, anchor=north west] at (1.0,-2.2)
-      {ensemble spread};
-  \end{tikzpicture}
-\end{frame}
-
-\begin{frame}{Forecasts start from an uncertain state}
-  \centering
-  \begin{tikzpicture}[x=1.15cm, y=1.05cm, font=\small,
-      pred/.style={draw=predcol, fill=predcol!18},
-      obs/.style={draw=obscol!80!black, fill=obscol, opacity=.75},
-      upd/.style={draw=updcol, fill=updcol!75, opacity=.85}]
-
-    \draw[-{Stealth[length=2mm]}, gray] (-0.4,1.4) -- (8.9,1.4);
-    \foreach \t/\lab in {0/$t_0$, 1.6/$t_1$, 3.2/$t_2$,
-                         4.8/$t_3$, 6.4/$t_4$, 8.0/$t_5$}{
-      \node[font=\scriptsize, anchor=north] at (\t,1.35) {\lab};
-    }
-
-    % --- 1: model predictions ---
-    \dens{0}{2.50}{0.28}{0.43}{pred}
-    \dens{1.6}{3.05}{0.45}{0.27}{pred}
-    \dens{3.2}{3.25}{0.45}{0.27}{pred}
-    \dens{4.8}{3.45}{0.45}{0.27}{pred}
-    \dens{6.4}{3.65}{0.50}{0.24}{pred}
-    \dens{8.0}{3.95}{0.58}{0.21}{pred}
-
-    % --- 2: observations ---
-    \only<2->{
-      \dens{1.6}{2.62}{0.24}{0.50}{obs}
-      \dens{3.2}{2.85}{0.24}{0.50}{obs}
-      \dens{4.8}{3.05}{0.24}{0.50}{obs}
-    }
-
-    % --- 3: analyses ---
-    \only<3->{
-      \dens{1.6}{2.72}{0.20}{0.60}{upd}
-      \dens{3.2}{2.95}{0.20}{0.60}{upd}
-      \dens{4.8}{3.15}{0.20}{0.60}{upd}
-      \draw[obscol, dashed, thick] plot[smooth]
-        coordinates {(0,2.55) (1.6,2.75) (3.2,2.95) (4.8,3.15)
-                     (6.4,3.35) (8.0,3.55)};
-    }
-
-    % --- 4: coverage ---
-    \only<4>{
-      \draw[gray!50!black, thick, dotted]
-        (6.4,2.6) ellipse (0.55 and 1.5);
-      \node[anchor=north, align=center, font=\scriptsize,
-            text=gray!50!black] at (6.6,1.05)
-        {no observations:\\ uncertainty not reduced};
-    }
-  \end{tikzpicture}
-\end{frame}
 
 % WHY: teach EDA in 40 seconds; install the toolkit link
 %   ("noise in observation space").
@@ -511,26 +408,30 @@
 %   analysis. The spread is flow-dependent: it moves with the
 %   weather. The question: WHAT is it about the flow that
 %   drives it?"
-\begin{frame}{ERA5's ensemble of data assimilations explores
-    the analysis neighbourhood through noise}
+\dacycleoverlaysoff
+\begin{frame}{Ensemble of data assimilations (EDA)}
   \begin{columns}
     \begin{column}{.5\textwidth}
       \begin{itemize}
-        \item Assimilation repeated with observations
-              perturbed within their errors
-        \item Ensemble spread $=$ flow-dependent proxy for
+        \item Assimilation repeated with observations and
+              parametrizations perturbed
+        \item Ensemble spread $\hat{=}$ flow-dependent
               analysis uncertainty
-        \item In toolkit terms: noise in observation space
+        \item Spread governed by instrument uncertainty, observational
+              coverage and model error growth
       \end{itemize}
     \end{column}
     \begin{column}{.5\textwidth}
       \centering
-      % <<< ADAPT: example spread map, ideally a blocked day
-      % (WCD paper / thesis ch.) >>>
-      \figplaceholder[.9\linewidth]{zg500 EDA spread map,
-        one synoptic situation}
+      \resizebox{\linewidth}{!}{\dacyclefigure}
     \end{column}
   \end{columns}
+\end{frame}
+
+\begin{frame}{}
+  \centering
+  \Huge
+  \textbf{P2: Can we study the flow-dependency of assimilation uncertainty climatologically?}
 \end{frame}
 
 % WHY: the statistics, named not derived; protects the
@@ -546,21 +447,11 @@
 %   significance. And across tens of thousands of grid points
 %   we control the false discovery rate. What I show you next
 %   survives both."
-\begin{frame}{Attributing spread to flow features requires
-    inference that respects dependence}
-  \begin{itemize}
-    \item Per grid point: spread $\sim$ WCB activity
-          $+$ weather regime $+$ seasonal cycle
-          % <<< ADAPT: exact predictor set / regime taxonomy
-          % as in the WCD paper
-    \item Serial dependence: GLS with HAC-robust tests
-    \item $\sim$[N] grid points: FDR-controlled
-          % <<< NUMBER: grid point count
-  \end{itemize}
+
+% make this plot build up
+\begin{frame}{Isolating time scales}
   \centering
-  % <<< ADAPT: pipeline diagram (one clean figure) >>>
-  \figplaceholder{analysis pipeline: EDA spread
-    $\rightarrow$ GLS/HAC $\rightarrow$ EMMs, FDR}
+  \includegraphics[scale=.75]{../Thesis/fig/WCD/f01.pdf}
 \end{frame}
 
 % WHY: headline P2a; the concrete, memorable geography.
@@ -572,6 +463,8 @@
 %   ascending air is exactly where observations are hardest to
 %   use and where the assimilation is least certain. So the
 %   least-known air is the air that feeds the block."
+
+% pick a single regime like EuBL and show key figures.
 \begin{frame}{Assimilation uncertainty peaks upstream of
     blocks, in WCB air --- not in the block itself}
   \centering
@@ -597,6 +490,10 @@
 %   inflate its EDA-based initial perturbations with singular
 %   vectors -- with the unstable directions -- precisely
 %   because observation-driven spread does not fill them."
+
+% show all the regimes and argue that no single regime is significantly more uncertain
+% apparently the differences in regime predictability have to come from the 
+% dynamics and these apparently do not dominate in the assimilation
 \begin{frame}{Regime dependence exists --- but spread does not
     project onto the unstable directions}
   \begin{columns}
@@ -749,25 +646,6 @@
   \synthstate{4}
 \end{frame}
 
-% WHY: limitations on YOUR terms; disarms the committee's
-%   easiest attacks; each bullet maps to a prepared Q&A answer
-%   (dossier B1--B5).
-% SAY: one sentence per bullet, unhurried: "I want to be
-%   precise about what is NOT claimed. [walk the bullets]"
-\begin{frame}{What this thesis does not claim}
-  \begin{itemize}
-    \item Stochastic inertia in the real atmosphere: one
-          unstable dimension is a strong assumption; the
-          dynamical dimensionality of blocking is open
-    \item Spread is not error: EDA spread is a
-          flow-dependent proxy, known to underdisperse
-    \item Additive white noise as model error: two partial
-          readings (baroclinic--diabatic vs.\
-          coarse-graining), neither complete
-    \item Coherence--life-cycle link rests on case studies,
-          not (yet) a climatology
-  \end{itemize}
-\end{frame}
 
 % WHY: outlook led by the sharpest practical corollary; each
 %   bullet deliberately seeds a Q&A thread you WANT (incl.\
