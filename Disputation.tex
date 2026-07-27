@@ -68,7 +68,7 @@
      \scriptsize testbed: blocking \& WCBs};
   \node[panel, ponestyle] (p1) at (0,2.6)
     {\textbf{P1 $\cdot$ state space}\\
-     \scriptsize perturb the systehm};
+     \scriptsize perturb the system};
   \node[panel, ptwostyle] (p2) at (-4.6,-2.6)
     {\textbf{P2 $\cdot$ assimilation space}\\
      \scriptsize perturb the observations \\ \scriptsize and parametrization};
@@ -90,17 +90,19 @@
   \fi
   \ifnum#1>3
     \draw[rel, <->] (p2.east) --
-      node[midway, below, font=\scriptsize]
-      {uncertainty peaks in WCB air} (p3.west);
+      node[midway, below, align=center, font=\scriptsize]
+      {coherence controls \\ uncertainty in WCBs} (p3.west);
   \fi
 \end{tikzpicture}}
 
 \input{tikz/fig_da_cycle}   % in the preamble
 
+\input{tikz/fig_cs}
+
 \author{Henry Schoeller}
 \title{Atmospheric Blocking and Warm Conveyor Belts:
        Mathematical Perspectives}
-\date{September 14,2026} % <<< ADAPT: exact defense date
+\date{September 14, 2026} % <<< ADAPT: exact defense date
 
 \begin{document}
 
@@ -173,7 +175,7 @@
     \begin{column}{.6\textwidth}
       \centering
       \includegraphics[scale=.35,  trim={4.5cm 8cm 6cm 0cm}, clip]{../Thesis/fig/Intro/f01.pdf}
-      {\tiny (Steinfeld 2019)}
+      {\tiny Steinfeld (2019)}
     \end{column}
   \end{columns}
 \end{frame}
@@ -306,7 +308,9 @@
     \exp\!\left(-\tfrac{\lVert X_i - X_j\rVert^2}
     {2\sigma\,\dd t}\right)
   \end{equation*}
-  \only<2>{\centering \includegraphics[scale=.2]{fig/chain_stochastic.png}}
+  \only<2>{\centering \includegraphics[scale=.2]{fig/chain_stochastic.png}\\
+          {\tiny Courtesy R. Chemnitz}
+}
   \only<3->{\begin{columns}
       \begin{column}{.6\textwidth}
         \begin{itemize}
@@ -317,7 +321,8 @@
       \end{column}
       \begin{column}{.4\textwidth}
         \centering
-        \includegraphics[scale=.2]{fig/chain_stochastic.png}
+        \includegraphics[scale=.2]{fig/chain_stochastic.png}\\
+        {\tiny Courtesy R. Chemnitz}
       \end{column}
     \end{columns}}
 \end{frame}
@@ -391,9 +396,6 @@
 % PAPER 2 -- OBSERVATION SPACE (~7 min)
 % ============================================================
 
-\input{tikz/fig_da_cycle}
-
-
 % WHY: teach EDA in 40 seconds; install the toolkit link
 %   ("noise in observation space").
 % SAY: "ERA5, the reanalysis we all use, is accompanied by an
@@ -413,10 +415,10 @@
   \begin{columns}
     \begin{column}{.5\textwidth}
       \begin{itemize}
-        \item Assimilation repeated with observations and
-              parametrizations perturbed
-        \item Ensemble spread $\hat{=}$ flow-dependent
-              analysis uncertainty
+        \item Data assimilation = observations + model \pause
+        \item EDA: Assimilation repeated with observations and
+              parametrizations perturbed \pause
+        \item Ensemble spread $\hat{=}$ analysis uncertainty \pause
         \item Spread governed by instrument uncertainty, observational
               coverage and model error growth
       \end{itemize}
@@ -448,10 +450,27 @@
 %   we control the false discovery rate. What I show you next
 %   survives both."
 
-% make this plot build up
 \begin{frame}{Isolating time scales}
-  \centering
-  \includegraphics[scale=.75]{../Thesis/fig/WCD/f01.pdf}
+  \begin{tikzpicture}[remember picture, overlay]
+    % figure, shifted right and down from the frame's default anchor
+    \node[anchor=north west, xshift=0cm, yshift=-1cm]
+      at (current page.north west) {%
+      \only<1>{\includegraphics[scale=.75]{fig/ChangePoints_obs.pdf}}%
+      \only<2>{\includegraphics[scale=.75]{fig/ChangePoints_obs_dashes.pdf}}%
+      \only<3>{\includegraphics[scale=.75]{fig/ChangePoints_fit.pdf}}%
+    };
+    % itemize in the top-right white space
+    \node[anchor=north east, xshift=0cm, yshift=-1cm,
+          text width=5cm, align=left]
+      at (current page.north east) {%
+      \begin{itemize}
+        \item<1-> Instrument generation influence dominant
+        \item<2-> Estimate break points for abrupt changes
+        \item<3-> Statistical model to estimate this
+        \item<3-> Use residuals to isolate flow-dependency
+      \end{itemize}
+    };
+  \end{tikzpicture}
 \end{frame}
 
 % WHY: headline P2a; the concrete, memorable geography.
@@ -465,14 +484,16 @@
 %   least-known air is the air that feeds the block."
 
 % pick a single regime like EuBL and show key figures.
-\begin{frame}{Assimilation uncertainty peaks upstream of
-    blocks, in WCB air --- not in the block itself}
+\begin{frame}{Assimilation uncertainty during Greenland blocking}
   \centering
-  % <<< ADAPT: key EMM / map figure, 16:9 re-export >>>
-  \figplaceholder{EMM map: spread vs.\ WCB activity;
-    maximum upstream of blocking region}
-  \par\smallskip
-  Elevated by [X\,\%] where WCBs are active % <<< NUMBER
+\only<1-3>{\includegraphics[scale=.75]{fig/GL_example_regimeonly.pdf}}
+\only<4->{\includegraphics[scale=.75]{fig/GL_example.pdf}}
+
+  \begin{itemize}
+    \item<2-> Assimilation more certain in block's core, uncertain south of it
+    \item<3-> Smooth field, low moisture content, low baroclinicity $\Rightarrow$ low spread
+    \item<4-> WCB occurrence enforces this pattern, but net increase
+  \end{itemize}
 \end{frame}
 
 % WHY: headline P2b -- the independence result; this arrow is
@@ -494,24 +515,19 @@
 % show all the regimes and argue that no single regime is significantly more uncertain
 % apparently the differences in regime predictability have to come from the 
 % dynamics and these apparently do not dominate in the assimilation
-\begin{frame}{Regime dependence exists --- but spread does not
-    project onto the unstable directions}
-  \begin{columns}
-    \begin{column}{.55\textwidth}
+\begin{frame}{Assimilation uncertainty in weather regimes}
       \centering
-      % <<< ADAPT: within-regime EMM effects figure >>>
-      \figplaceholder[.95\linewidth]{regime EMMs: modulation
-        without dynamically-expected ranking}
-    \end{column}
-    \begin{column}{.45\textwidth}
+      % \includegraphics[scale=.75]{../Thesis/fig/WCD/f07.pdf}
+      % remove graticules, make contours thinner or fewer
+      \only<1>{\includegraphics[scale=.75]{fig/RegimeComposite_no_label.pdf}}
+      \only<2->{\hspace*{-1cm} \includegraphics[scale=.75]{fig/RegimeComposite_small.pdf}
+      \includegraphics[scale=.75]{fig/AreaMeanEMM_small.pdf}}
       \begin{itemize}
-        \item Regimes modulate spread by [X] % <<< NUMBER
-        \item No projection onto attractor instability
-        \item Consistent with operations: EDA $+$
-              singular-vector inflation
+        \item<1-> Regimes feature distinct uncertainty patterns
+        \item<2-> No regime stands out as more uncertain
+        \item<3-> Predictability differences must come from forecast, not assimilation
+        \item<4-> EDA does not (predominantly) perturb unstable directions
       \end{itemize}
-    \end{column}
-  \end{columns}
 \end{frame}
 
 % WHY: takeaway + panel 2 + first cross-arrow + transition.
@@ -521,9 +537,7 @@
 %   where the uncertainty sits: in WCB air. So the natural
 %   next question is material: what is that air actually
 %   DOING?"
-\begin{frame}{Perturb the observations $\rightarrow$
-    flow-dependent uncertainty, independent of the
-    unstable subspace}
+\begin{frame}{}
   \centering
   \synthstate{2}
 \end{frame}
@@ -539,22 +553,33 @@
 %   differently: one recirculating the same air for days, one
 %   flushing air straight through. Indices cannot tell them
 %   apart; trajectories can."
-\begin{frame}{Eulerian indices see the flow; they do not see
-    the air masses}
+\begin{frame}{The Lagrangian perspective}
+\centering
+% remove wind, title
+\only<1->{\includegraphics[scale=.75]{fig/synpv2016.pdf}\\}
+\only<2>{\includegraphics[scale=.75]{fig/traj_20160502_00.pdf}}
+\only<3->{
   \begin{columns}
-    \begin{column}{.5\textwidth}
+    \begin{column}{.4\textwidth}
       \centering
-      % <<< ADAPT: blocking index field snapshot >>>
-      \figplaceholder[.9\linewidth]{index view: 2-D field,
-        one instant}
+      \includegraphics[scale=.75]{fig/traj_20160502_00.pdf}
     \end{column}
-    \begin{column}{.5\textwidth}
-      \centering
-      % <<< ADAPT: trajectory cloud through the same block >>>
-      \figplaceholder[.9\linewidth]{Lagrangian view:
-        trajectories through the same block}
+    \begin{column}{.6\textwidth}
+      \begin{itemize}
+  \item<3-> WCB influence is diagnosed by individual trajectories
+  \item<4-> Dependent on arbitrary thresholds and definitions
+  \item<5-> No information on the air masses' geometric structure
+\end{itemize}
     \end{column}
   \end{columns}
+}
+\end{frame}
+
+\begin{frame}{}
+  \centering
+  \Huge
+  \textbf{P3: What can be learned by considering coherent air masses rather
+  than individual trajectories?}
 \end{frame}
 
 % WHY: method in one intuition; the "perturb the air parcels"
@@ -568,22 +593,27 @@
 %   space -- the same diffusion-map machinery, incidentally,
 %   as the Markov chain of paper one. Robustness to noise is
 %   the DEFINITION of the object, not a nuisance to control."
-\begin{frame}{Coherent sets: air streams defined by robustness
-    to perturbation of parcel positions}
+\begin{frame}{Coherent sets}
   \begin{itemize}
-    \item Advect parcel ensemble; perturb positions with
-          noise $\varepsilon$
-    \item Trajectory bundles that stay together under
-          perturbation $=$ coherent sets
-    \item Scale-invariant, metric-agnostic; same
-          diffusion-map machinery as P1
+    \item<1-> Sets of trajectories that are robust to perturbations
+    \item<2-> Similar diffusion-based algorithm as in P1
+    \item<3-> Formally: $(\Phi^{-1}_t \circ \mathcal{D}_{\epsilon} \circ \Phi_t)(\mathbb{A}) \approx \mathbb{A}$ for all $t$
   \end{itemize}
-  \centering
-  % <<< ADAPT: method intuition figure (NPG paper) >>>
-  \figplaceholder{coherent-set construction sketch}
-  \par\smallskip
-  {\scriptsize Schoeller et al., Nonlin.\ Processes Geophys.\
-    32, 51 (2025)} % <<< ADAPT: confirm citation form
+    \centering
+  \coherentsetsfigure
+  % \includegraphics{fig/cs_schematic.jpeg}
+  \only<7->{\par\smallskip
+  {\tiny adapted from Banisch \& Koltai (2017)}}
+\end{frame}
+
+\begin{frame}{WCBs as coherent sets}
+\centering
+% try to make prettier, remove gray set and numbers
+\only<1>{\includegraphics[scale=.5,  trim={24.6cm 7.9cm 10.2cm 4.5cm}, clip]{fig/20160502_00_3d.pdf}}
+% smaller, remove numbers
+\only<2->{
+  \includegraphics[scale=.375,  trim={24.6cm 7.9cm 10.2cm 4.5cm}, clip]{fig/20160502_00_3d.pdf}
+  \includegraphics[scale=.75]{fig/20160502_00_theta.pdf}}
 \end{frame}
 
 % WHY: headline P3; the life-cycle narrative, concretely on
@@ -597,18 +627,13 @@
 %   equivalent-barotropic structure of a healthy block. Then,
 %   before decay, the coherence breaks down: the sets
 %   fragment, and the apparent geometric dimension of the
-%   traced air masses drops. The material anatomy anticipates
+%   traced air masses drops. The material anatomy accompanies
 %   the death of the block."
-\begin{frame}{The coherent air masses' dimension tracks the
-    block life cycle --- breakdown accompanies decay}
+
+% add explanation about d. build up the figure
+\begin{frame}{Kinematic imprint of a blocking}
   \centering
-  % <<< ADAPT: central clustering / life-cycle figure >>>
-  \figplaceholder{coherent sets through onset / maturity /
-    decay of case study [which?]}
-  \par\smallskip
-  Persistent 3-D air mass $\Leftrightarrow$ quasi-2-D flow;
-  coherence loss precedes decay % <<< ADAPT: tense/claim
-  % strength to match your case-study evidence exactly
+  \includegraphics[scale=.75]{fig/dimensionall2016.pdf}
 \end{frame}
 
 % WHY: takeaway + panel 3 + second cross-arrow.
@@ -616,79 +641,82 @@
 %   anatomy, and its dimension marks the life cycle -- the
 %   same dimension-persistence connection we met in state
 %   space, now in physical space."
-\begin{frame}{Perturb the air parcels $\rightarrow$ blocks have
-    a material anatomy}
+\begin{frame}{}
   \centering
-  \synthstate{3}
-\end{frame}
-
-% ============================================================
-% SYNTHESIS (~5 min)
-% ============================================================
-
-% WHY: the payoff; the ONLY new content is the relations.
-% SAY: "The complete picture. One toolkit -- perturb and watch
-%   -- applied in three spaces. The connections are the
-%   thesis: observational uncertainty is independent of the
-%   unstable directions, which tells assimilation design that
-%   both must be represented, separately. Dimension tracks
-%   persistence, in state space -- one unstable direction
-%   enables stochastic inertia -- and in physical space --
-%   coherent-mass dimension marks the life cycle. And the
-%   uncertainty concentrates in exactly the WCB air whose
-%   coherent organisation paper three diagnoses. Two attitude
-%   reversals carry all of it: dimension, usually the curse of
-%   high-dimensional estimation, became a lens; noise, usually
-%   the nuisance corrupting forecasts, became a probe."
-\begin{frame}{One toolkit, three spaces: noise as probe,
-    dimension as lens}
-  \centering
-  \synthstate{4}
-\end{frame}
-
-
-% WHY: outlook led by the sharpest practical corollary; each
-%   bullet deliberately seeds a Q&A thread you WANT (incl.\
-%   the ML thread -- dossier B16--B23).
-% SAY: "The corollary I find most useful in practice:
-%   stochastic inertia is detectable from the DETERMINISTIC
-%   trajectory alone -- and the deterministic run is the only
-%   handle we ever have, there is no second atmosphere to
-%   calibrate against. That cuts several ways: whether SPPT
-%   and SPP actually excite the unstable directions is
-%   testable; ML emulators make such tests essentially free
-%   -- they are the cheapest deterministic trajectories ever
-%   produced; latent-space assimilation implicitly bets on low
-%   local dimension, and this toolkit can say where that bet
-%   fails; and coherent sets are agnostic to the space they
-%   act in -- state space is next."
-\begin{frame}{The deterministic trajectory anticipates the
-    stochastic response --- the only handle we have}
-  \begin{itemize}
-    \item Do SPPT/SPP excite the unstable subspace? Now
-          testable
-    \item ML emulators: cheap deterministic trajectories
-          $\rightarrow$ stochastic-inertia tests at scale
-    \item Latent-space assimilation presumes low local
-          dimension --- the lens applies
-    \item Coherent sets in state space; the climate-model
-          setting
-  \end{itemize}
-\end{frame}
-
-% WHY: closing = the complete schematic; stays up during Q&A
-%   so every answer can point back into the framing.
-% SAY: "Uncertainty and dimensionality are not obstacles to be
-%   suppressed -- they are diagnostics of how the atmosphere
-%   behaves. Thank you."
-\begin{frame}[plain]
-  \centering
-  \synthstate{4}
-  \par\bigskip
+  \only<1>{\synthstate{3}}
+  \only<2->{\synthstate{4}}
+  \only<3->{\par\bigskip
   Uncertainty and dimensionality are not obstacles to
   suppress --- they are diagnostics of how the atmosphere
-  behaves.
+  behaves.}
 \end{frame}
+
+% % ============================================================
+% % SYNTHESIS (~5 min)
+% % ============================================================
+
+% % WHY: the payoff; the ONLY new content is the relations.
+% % SAY: "The complete picture. One toolkit -- perturb and watch
+% %   -- applied in three spaces. The connections are the
+% %   thesis: observational uncertainty is independent of the
+% %   unstable directions, which tells assimilation design that
+% %   both must be represented, separately. Dimension tracks
+% %   persistence, in state space -- one unstable direction
+% %   enables stochastic inertia -- and in physical space --
+% %   coherent-mass dimension marks the life cycle. And the
+% %   uncertainty concentrates in exactly the WCB air whose
+% %   coherent organisation paper three diagnoses. Two attitude
+% %   reversals carry all of it: dimension, usually the curse of
+% %   high-dimensional estimation, became a lens; noise, usually
+% %   the nuisance corrupting forecasts, became a probe."
+% \begin{frame}{}
+%   \centering
+%   \synthstate{4}
+% \end{frame}
+
+
+% % WHY: outlook led by the sharpest practical corollary; each
+% %   bullet deliberately seeds a Q&A thread you WANT (incl.\
+% %   the ML thread -- dossier B16--B23).
+% % SAY: "The corollary I find most useful in practice:
+% %   stochastic inertia is detectable from the DETERMINISTIC
+% %   trajectory alone -- and the deterministic run is the only
+% %   handle we ever have, there is no second atmosphere to
+% %   calibrate against. That cuts several ways: whether SPPT
+% %   and SPP actually excite the unstable directions is
+% %   testable; ML emulators make such tests essentially free
+% %   -- they are the cheapest deterministic trajectories ever
+% %   produced; latent-space assimilation implicitly bets on low
+% %   local dimension, and this toolkit can say where that bet
+% %   fails; and coherent sets are agnostic to the space they
+% %   act in -- state space is next."
+% \begin{frame}{The deterministic trajectory anticipates the
+%     stochastic response --- the only handle we have}
+%   \begin{itemize}
+%     \item Do SPPT/SPP excite the unstable subspace? Now
+%           testable
+%     \item ML emulators: cheap deterministic trajectories
+%           $\rightarrow$ stochastic-inertia tests at scale
+%     \item Latent-space assimilation presumes low local
+%           dimension --- the lens applies
+%     \item Coherent sets in state space; the climate-model
+%           setting
+%   \end{itemize}
+% \end{frame}
+
+% % WHY: closing = the complete schematic; stays up during Q&A
+% %   so every answer can point back into the framing.
+% % SAY: "Uncertainty and dimensionality are not obstacles to be
+% %   suppressed -- they are diagnostics of how the atmosphere
+% %   behaves. Thank you."
+% \begin{frame}[plain]
+%   \centering
+%   \synthstate{4}
+%   \par\bigskip
+%   Uncertainty and dimensionality are not obstacles to
+%   suppress --- they are diagnostics of how the atmosphere
+%   behaves.
+% \end{frame}
 
 % ============================================================
 % BACKUP
