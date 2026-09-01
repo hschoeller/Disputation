@@ -107,11 +107,13 @@
 \begin{document}
 
 % ============================================================
-% OPENING (~4 min)
+% OPENING (~3 min)
 % ============================================================
 
 % WHY: plant the one sentence the whole defense hangs on.
-% SAY: read title; then, freely: "In one sentence: this thesis
+% SAY: "Welcome to the presentation of my doctoral thesis with the title 
+% `Atmospheric Blocking and Warm Conveyor Belts: Mathematical Perspectives'.
+% In one sentence: this thesis
 %   explores the coupling of blocking and warm conveyor belts by developing
 %   and applying a mathematical toolkit whose applicability transcends the 
 %   specific system."
@@ -143,18 +145,30 @@
 % WHY: generalize from the June 2026 case to the phenomena
 %   themselves; introduce WCBs as a first-class protagonist,
 %   not just a mechanism note on blocks.
-% SAY: "That event wasn't a one-off. Blocking is a recurring
-%   weather regime behind heatwaves, drought, and cold spells
-%   worldwide -- Russia 2010 sat under one for five weeks --
-%   and models still struggle with its onset and duration in
-%   the medium range. Warm conveyor belts are just as
+% SAY: "But why should we care about blockings and warm conveyor belts and 
+% why are does their investigation call for advanced mathematical methods?
+% A blocking is a high-impact, persistent weather regime crucially shaping
+% the mid-latitude circulation while still posing significant challenges
+% for both weather and climate models. This is likely due to the vast range of 
+% scales and physical processes exerting influence on their dynamics and 
+% morphology. 
+% Warm conveyor belts are just as
 %   consequential in their own right: they redistribute heat
-%   and moisture on a hemispheric scale and drive a large share
-%   of forecast-uncertainty growth downstream. And critically
+%   and moisture on a hemispheric scale and play a crucial role in  
+%   forecast-uncertainty growth. These features lead to them being considered
+% one of the prime conduits of diabatic influence on the large-scale flow. 
+% And critically
 %   for this thesis, the two are not independent -- blocking
-%   and WCBs have been shown to interact strongly, each
-%   sustaining and reshaping the other. That coupling is the
-%   system this thesis is built around."
+%   and WCBs have been shown to interact strongly, as depicted in this
+% schematic: WCBs caused by upstream low-pressure systems lead to negative 
+% PV anomalies in upper levels enforcing a blocking systems strength as well as
+% their stationarity, because the anomaly is enforced at their upstream flank.
+% That coupling is the
+%   system this thesis is built around. But rather than simply reiterating each
+% of the 
+% physical insights obtained in the three papers the thesis is built on,
+% I want to structure this presentation by focussing on the commonalities of
+% the mathematical methods developed and applied."
 \begin{frame}{Blocking and warm conveyor belts}
   \begin{columns}
     \begin{column}{.4\textwidth}
@@ -184,18 +198,21 @@
 % WHY: roadmap; promises the synthesis without spoiling it.
 % SAY: "The thesis asks three questions about this system, and
 %   -- this is the point -- answers all three with the same
-%   operation: perturb something and watch the response. Paper
+%   operation: perturb something and watch the response while consistently
+% reflecting on the associated dimensions -- dynamical or physical. The three
+% papers are ordered from most abstract to most concrete. Paper
 %   one perturbs the trajectory of the system in state space.
-%   Paper two perturbs the observations. Paper three perturbs
-%   the air parcels themselves. Three spaces, one toolkit; by
-%   the end this picture will be filled in."
+%   Paper two analyzes perturbation to the observations and parametrizations
+% in assimilation space. And paper three perturbs
+%   air parcels themselves in physical space. By
+%   the end of the presentation, this picture will be filled in."
 \begin{frame}{}
   \centering
   \synthstate{0}
 \end{frame}
 
 % ============================================================
-% PAPER 1 -- STATE SPACE (~6 min)
+% PAPER 1 -- STATE SPACE (~5 min)
 % ============================================================
 
 % WHY: establish the state-space picture before any dynamics.
@@ -203,17 +220,28 @@
 %   marked via the right panel, (3) right panel becomes the
 %   stochastic attractor -- deterministic vs stochastic side by
 %   side, motivating "what does noise do to these regimes?"
-% SAY (1): "Paper one lives in state space. This is the
-%   attractor of the Charney--DeVore model -- every point a
-%   possible large-scale flow, the density showing where the
-%   system spends its time. Two lobes: two preferred regimes."
-% SAY (2): "Each lobe sits near an unstable fixed point -- the
-%   blocked state here, the zonal state here."
-% SAY (3): "Now add noise. Side by side: the deterministic
-%   attractor, and the stochastic one. It smears -- but the
-%   regime structure survives. The question of this paper: what
-%   does that noise do to how long the system stays in a
-%   regime?"
+% SAY (1): "As mentioned before, the first paper adopts an abstract dynamical 
+% systems perspective by considering the Charney-DeVore-model, whose attractor
+% is shown here in principle component space. The system mainly travels on
+% these highly populated orbits as indicated by the logarithmic density scale.
+% It irregularly collapses to this one-dimensional submanifold before
+% transitioning to quasi-periodic chaotic oscillations before collapsing again.
+% SAY (2): "The dynamics are critically shaped by the two unstable fixed points indicated
+% here by the red and black crosses, which happen to correspond -- not
+% coincidentially -- to a zonal and blocked flow state respectively.
+% In models of the atmosphere small random perturbations or "noise" is
+% commonly used to represent unresolved
+% processes and uncertainties, so a possible interpretation of this noise
+% is that we treat it as a stand-in for moist effects; the effects of WCBs
+% in particular."
+% SAY (3): "What happens when we add noise of strength sigma to the system at
+% hand and rerun the simulation? 
+% As expected, the noise smears out the detailed structure of the attractor
+%  -- but it also allows the system to explore regions of the state space that
+% were previously inaccessible and the general regime structure survives. 
+% For such a low-dimensional system, resimultaion for different noise levels
+% is feasible, but for other systems, this may not be the case and one may not
+% even have access to the governing equations."
 \begin{frame}{Charney--DeVore: a paradigm for regime dynamics}
   \centering
   \hspace*{-1cm}
@@ -275,6 +303,9 @@
   \end{tikzpicture}
 \end{frame}
 
+% SAY: "This is why the first paper tackles the question: Can we study the 
+% system's reaction to noise without access to the dynamics?"
+
 \begin{frame}{}
   \centering
   \Huge
@@ -284,21 +315,19 @@
 % WHY: the methodological contribution of P1 in one picture;
 %   this is a gap-method slide ("what could you not do
 %   before").
-% SAY: "The standard way to answer that question is brute
-%   force: for every noise level, simulate a long stochastic
-%   trajectory and count lifetimes -- expensive, and it
-%   requires the model. Our method needs ONE deterministic
-%   trajectory. We turn it into a Markov chain: one step of
+% SAY: "The method we developed to address this question needs ONE
+% deterministic
+%   trajectory -- simulated or observed. We turn it into a Markov chain:
+% one step of
 %   the chain is one deterministic step T followed by one
-%   random jump D between points of the trajectory, weighted
-%   by distance -- that jump plays the role of the noise. The
-%   expected time to escape the regime is then pure linear
-%   algebra on that chain -- no re-simulation, and in fact the
-%   governing equations never need to be known."
+%   random jump D between points of the trajectory, with the probability
+% according to a diffusion kernel of strength sigma -- that jump plays the
+% role of the noise as illustrated in this schematic: 
+% the black arrows illustrate the deterministic progression while the 
+% red arrows illustrate the stochastic jumps. We use the Markov operator
+% P to define a zonal and a blocking regime and extract regime lifetimes for
+% each using standard linear algebra without access to the underlying dynamics."
 
-% First show regime definitions, then show Monte Carlo curve only (need
-% to recreate figure for that), then switch to slide that explains
-% Markov chain ansatz, then switch back and show both curves.
 \begin{frame}{A Markov chain approach}
   \textbf{Input:} (Deterministic) trajectory $\mathcal{X} = \{X_n\}_{n=1,\hdots, N}$\\
   \textbf{Ansatz:} one deterministic step $T$, one random step $D(\sigma)$:
@@ -329,39 +358,45 @@
 
 % WHY: the headline result, with the mechanism and the
 %   condition stated exactly. This is the mathematical heart.
-% SAY: "And here is the surprise. Lifetimes do not decay
+% SAY: "An application of this toolchain results in a regime definition as
+% shown here, with the blocking regime clearly centered around the
+% one-dimensional submanifold extending from the blocking fixed point.
+% And here is the surprise. Lifetimes do not decay
 %   monotonically with noise: for the blocked regime there is
 %   a noise level at which the regime lives LONGER than
-%   without noise -- by up to [X, <<< NUMBER: your maximal
-%   relative increase, e.g. 'roughly one and a half times']
-%   -- we call this stochastic inertia. The mechanism is
-%   geometric: escape happens along a SINGLE unstable
+%   without noise. The mechanism is
+%   geometric: escape happens along the previously mentioned SINGLE unstable
 %   direction, slowly at first, then accelerating. A random
 %   kick against that direction early in the escape is cheap
 %   for the noise but expensive for the escape -- it resets
 %   the slow phase. The condition is sharp: exactly one
 %   unstable dimension. A toy system with three unstable
 %   directions shows no such effect; a forthcoming paper
-%   proves this in generality."
+%   proves this in generality.
+% Additionally, this effect is amplified by state space exploration as can
+% be seen by the blue line obtained from stochastic resimulation of the system.
+% It is still, however detectable without access to the dynamics and our method
+% succeeds to capture it."
 \begin{frame}{Regime dynamics and noise}
   \only<1>{\centering \includegraphics[scale=.75]{fig/Sets_subsample_10_sigma_0.01_no_label.pdf}}
   \only<2>{
     \centering
     \includegraphics[scale=.75]{fig/Sets_subsample_10_sigma_0.01_no_label.pdf}
     \includegraphics[scale=.75]{fig/CdV_MeanRegimeLifetimeComparison_10_0.01_nolabel_1.pdf}
-  }
+    \begin{itemize}
+      \item Escape along \emph{single} unstable direction can be slowed by noise
+    \end{itemize}}
   \only<3->{
     \centering
     \includegraphics[scale=.75]{fig/Sets_subsample_10_sigma_0.01_no_label.pdf}
-    \includegraphics[scale=.75]{fig/CdV_MeanRegimeLifetimeComparison_10_0.01_nolabel_2.pdf}\\}
-  \only<4->{\begin{itemize}
+    \includegraphics[scale=.75]{fig/CdV_MeanRegimeLifetimeComparison_10_0.01_nolabel_2.pdf}\\
+    \begin{itemize}
       \item Escape along \emph{single} unstable direction can be slowed by noise
       \item Effect amplified by state space exploration
     \end{itemize}
-    \par\smallskip
+        \par\smallskip
     {\scriptsize Schoeller et al., Commun.\ Appl.\ Math.\
-      Comput.\ Sci.\ (in press), arXiv:2604.27991}
-  }
+      Comput.\ Sci.\ (in press), arXiv:2604.27991}}
 \end{frame}
 
 % \begin{columns}
@@ -383,9 +418,11 @@
 % WHY: takeaway + light the first panel + spoken transition.
 % SAY: "So: perturb the trajectory, and persistence turns out
 %   to be a property of the unstable geometry -- of how many
-%   directions lead out. First panel done. But this was an
-%   idealised world with noise we chose ourselves. In the real
-%   atmosphere: what IS that noise -- and how well do we even
+%   directions lead out. But this was an
+%   idealised world with noise we chose ourselves and it was applied
+% indiscriminately along all possible dimensions. In the real
+%   atmosphere: what IS that noise, in which dimensions does it act -- and
+% how well do we even
 %   know the state we start from?"
 \begin{frame}{}
   \centering
@@ -393,23 +430,39 @@
 \end{frame}
 
 % ============================================================
-% PAPER 2 -- OBSERVATION SPACE (~7 min)
+% PAPER 2 -- OBSERVATION SPACE (~9 min)
 % ============================================================
 
 % WHY: teach EDA in 40 seconds; install the toolkit link
 %   ("noise in observation space").
-% SAY: "ERA5, the reanalysis we all use, is accompanied by an
-%   Ensemble of Data Assimilations: the assimilation is run
-%   [ten, <<< ADAPT: member count as you state it in the
-%   thesis>>>] times, each time with the observations
-%   perturbed within their error bars. Where the members
-%   agree, observations pin the state down; where they
-%   disagree -- the ensemble spread -- the state is uncertain.
+% SAY: "Data assimilation combines a dynamical model of the atmosphere with 
+% observations to obtain the most likely state of the atmosphere at a specific
+% point in time. Such an estimate is arguably of little value if not
+% accompanied by a quantification of the associated uncertainty. Not only does 
+% this tell us how sure we can be of derived conclusions; it also has a first
+% order effect on the accuracy of ensuing forecasts.
+% In ensemble 
+% data assimilation systems like the one implemented at the ECMWF, an ensemble 
+% of assimilation runs is carried out, each time with the observations and 
+% physics parametriztions perturbed. The spread between the ensemble members
+% then serves as an estimate of the assimilation uncertainty. 
 %   Note what this is in our language: noise injected in
-%   observation space, exploring the neighbourhood of the
-%   analysis. The spread is flow-dependent: it moves with the
-%   weather. The question: WHAT is it about the flow that
-%   drives it?"
+%   observation and assimilation space, exploring the neighbourhood of the
+%   analysis. The directions probed are notably determined by specifics of the
+% observation system, the paramatrizations and the state of the atmosphere
+% itself. The spread is flow-dependent: it moves with the
+%   weather. Mechanically, it is governed by the precision of the observing 
+% instruments, the coverage of the observations as well as the uncertainty of 
+% the model. This is also depicted in the schematic on the right: the first 
+% guess uncertainty indicated by the width of the red dashed lines is reduced
+% by the constrains exerted by the green observations -- more so if their
+% associated error bars are smaller and not at all if there are no observations.
+% Uncertainty also propagates through time since the initial first guess 
+% uncertainty is determined by the previous analysis' uncertainty.
+% Why is all of this important? It is because it is necessary to understand 
+% where the flow-dependency of the assimilation uncertainty comes from. This 
+% flow-dependency has so far only been investigated in case-studies, which 
+% makes their conclusions hard to generalize. The second paper therefore asks:"
 \dacycleoverlaysoff
 \begin{frame}{Ensemble of data assimilations (EDA)}
   \begin{columns}
@@ -430,6 +483,10 @@
   \end{columns}
 \end{frame}
 
+% SAY: Can we study the flow-dependency of assimilation uncertainty
+% climatologically? One might ask, what the challenge even is in such a 
+% climatological study.
+
 \begin{frame}{}
   \centering
   \Huge
@@ -438,17 +495,23 @@
 
 % WHY: the statistics, named not derived; protects the
 %   methodological contribution and pre-empts Rust.
-% SAY: "We ask that question climatologically: at every grid
-%   point over the North Atlantic--European sector, regress
-%   the spread of 500-hPa geopotential on WCB activity and on
-%   the large-scale weather regime, with the seasonal cycle
-%   controlled. Two statistical points, briefly, because they
-%   matter: consecutive days are strongly dependent, so we use
-%   generalised least squares with autocorrelation-robust
-%   tests -- naive regression would drastically overstate
-%   significance. And across tens of thousands of grid points
-%   we control the false discovery rate. What I show you next
-%   survives both."
+% SAY: "The answer can be appreciated in this plot, where the assimilation 
+% uncertainty of the mid tropospheric flow field in the North-Atlantic
+% European sector is shown for the entire available time span.
+% Noting the logarithmic scale, it becomes clear that the dataset is dominated
+% by the influence of respective instrument generation in each time period. 
+% Naively analyzing the associated flow-dependency would be confounded thes
+% long-time-scale signals, which we therefore aim to filter out by means of 
+% statistical techniques. 
+% First break points are objectively determined across which the statistical 
+% properties of the time series are assumed to change abruptly; like due to the
+% introduction of satellite instruments. Next, generalized least squares
+% models are fit to the data at each grid point independently. These are
+% assumed to encompass the long-time-scale
+% components of the time series. The residuals -- so the difference between 
+% the red and the black line -- are then assumed to represent the flow-dependent
+% component varying on short time scales and it is these residuals that 
+% are analyzed in the following by means of additional covariates.
 
 \begin{frame}{Isolating time scales}
   \begin{tikzpicture}[remember picture, overlay]
@@ -474,14 +537,20 @@
 \end{frame}
 
 % WHY: headline P2a; the concrete, memorable geography.
-% SAY: "Result one: assimilation uncertainty is not largest
-%   inside the block. It is largest UPSTREAM, in the air where
-%   warm conveyor belts are active: spread there is elevated
-%   by [X %, <<< NUMBER: your EMM effect in physical units or
-%   percent]. Physically plausible: moist, cloudy, rapidly
-%   ascending air is exactly where observations are hardest to
-%   use and where the assimilation is least certain. So the
-%   least-known air is the air that feeds the block."
+% SAY: "For example, the occurrence of a Greenland blocking as indicated by 
+% the green countour lines is associated with a distinct and statistically
+% robust pattern of assimilation uncertainty. The state estimate is more certain in
+% the blocks core and more uncertain south of it. Additional analyses 
+% prove that this comes about due to the smoothness of the field --
+% positional uncertainty of a smooth field will incurr a smaller error 
+% than that of a rough field -- the moisture content and baroclinicity.
+% If an above average WCB activity coincides with the blocking, this
+% pattern is significantly enforced -- especially in the Gulf stream region, 
+% where WCBs often originate, but in its core where the ridge-building effect
+% of the WCB outflow induces a smoother field. All in all the WCB activity
+% leads to a net increase in assimilation uncertainty -- a finding that
+% is consistent regardless of the weather regime and adds to the existing
+% literature that has so far focussed on their impact on forecast uncertainty."
 
 % pick a single regime like EuBL and show key figures.
 \begin{frame}{Assimilation uncertainty during Greenland blocking}
@@ -498,14 +567,23 @@
 
 % WHY: headline P2b -- the independence result; this arrow is
 %   the P1--P2 link in the schematic, so state it carefully.
-% SAY: "Result two is a negative result, and I consider it the
-%   more interesting one. Weather regimes do modulate the
-%   uncertainty -- but NO regime is singled out the way the
-%   dynamics would suggest. If assimilation uncertainty simply
+% SAY: "Different weather regimes all exhibit idiosyncratic uncertainty 
+% patterns, that I wont go into detail, but which by and large confirm 
+% with the previously mentioned mechanisms.
+% What these figures also show, however, is that there seems to be no single
+% regime that is clearly more or less uncertain than others -- a fact that is 
+% not guaranteed by the methodological design.
+% In fact, a dedicated investigation into this question proves that 
+% the spatially integrated uncertainty anomalies are seldomly significantly
+% different from zero and if they are, their magnitude is small.
+% One might conceive this as a NULL result, but it is important and interesting
+% nonetheless. A vast body of literature proves that different weather regimes
+% are in fact associated with different 
+% levels of predictablity. If assimilation uncertainty simply
 %   followed dynamical instability -- the unstable directions
-%   of the attractor, the states where errors grow fastest --
+%   of the attractor --
 %   then the regimes known to be dynamically unstable should
-%   light up. They don't. Observational uncertainty and
+%   light up. That they don't implies that assimilation uncertainty and
 %   dynamical instability are, in this sense, independent.
 %   And that independence is visible in operations: ECMWF must
 %   inflate its EDA-based initial perturbations with singular
@@ -531,12 +609,14 @@
 \end{frame}
 
 % WHY: takeaway + panel 2 + first cross-arrow + transition.
-% SAY: "Perturb the observations: uncertainty is flow-
+% SAY: "To summarize, perturbing the observations and 
+% parametrizations uncovers that assimilation uncertainty is flow-
 %   dependent -- and independent of the unstable subspace.
-%   That's the first connection between the panels. And note
-%   where the uncertainty sits: in WCB air. So the natural
-%   next question is material: what is that air actually
-%   DOING?"
+%   That's the first connection between the panels. For the WRs we have seen 
+% that forecast and assimilation uncertainty do not coincide, but for the 
+% WCBs that was actually the case. Given that WCBs appear to be uncertain both
+% wrt their observation and their dynamics, the next presented paper deals 
+% with how they can robustly defined as spatio-temporally extended objects."
 \begin{frame}{}
   \centering
   \synthstate{2}
@@ -608,13 +688,58 @@
 
 \begin{frame}{WCBs as coherent sets}
 \centering
-% try to make prettier, remove gray set and numbers
-\only<1>{\includegraphics[scale=.5,  trim={24.6cm 7.9cm 10.2cm 4.5cm}, clip]{fig/20160502_00_3d.pdf}}
-% smaller, remove numbers
-\only<2->{
-  \includegraphics[scale=.375,  trim={24.6cm 7.9cm 10.2cm 4.5cm}, clip]{fig/20160502_00_3d.pdf}
-  \includegraphics[scale=.75]{fig/20160502_00_theta.pdf}}
+\only<1>{\includegraphics[scale=.5,  trim={24cm 8cm 8cm 6cm}, clip]{fig/20160502_00_3d.pdf}}
+\only<2>{
+  \begin{columns}
+    \begin{column}{.4\textwidth}
+      \centering
+      \includegraphics[scale=.375,  trim={24cm 8cm 8cm 6cm}, clip]{fig/20160502_00_3d.pdf}
+    \end{column}
+    \begin{column}{.6\textwidth}
+      \centering
+        \includegraphics[scale=.75]{fig/20160502_00_theta.pdf}\\
+        \begin{itemize}
+          \item Coherent air streams differ dynamically
+          \item WCBs identified by latent heating
+        \end{itemize}
+    \end{column}
+  \end{columns}}
+\only<3>{
+  \begin{columns}
+    \begin{column}{.4\textwidth}
+      \centering
+      \includegraphics[scale=.375,  trim={24cm 8cm 8cm 6cm}, clip]{fig/20160502_00_3d.pdf}
+    \end{column}
+    \begin{column}{.6\textwidth}
+      \centering
+        \includegraphics[scale=.75]{fig/wcb_2016_sub.pdf}
+          \begin{itemize}
+          \item Coherent air streams differ dynamically
+          \item WCBs identified by latent heating
+          \item WCB fraction: how many trajectories associated with WCBs
+        \end{itemize}
+    \end{column}
+  \end{columns}}
+\only<4->{
+  \begin{columns}
+    \begin{column}{.4\textwidth}
+      \centering
+      \includegraphics[scale=.375,  trim={24cm 8cm 8cm 6cm}, clip]{fig/20160502_00_3d.pdf}
+    \end{column}
+    \begin{column}{.6\textwidth}
+            \centering
+        \includegraphics[scale=.75]{fig/wcb_2016.pdf}
+                  \begin{itemize}
+          \item Coherent air streams differ dynamically
+          \item WCBs identified by latent heating
+          \item WCB influence is intermittent
+          \item Clustering by coherence uncovers distinct ascent histories
+        \end{itemize}
+    \end{column}
+  \end{columns}}
 \end{frame}
+
+
 
 % WHY: headline P3; the life-cycle narrative, concretely on
 %   one named case.
@@ -630,10 +755,19 @@
 %   traced air masses drops. The material anatomy accompanies
 %   the death of the block."
 
+\input{tikz/fig_dimension}
+
+\begin{frame}{Kinematic imprint of a blocking}
+  \centering
+  \includegraphics[scale=.75]{../Thesis/fig/NPG/f03.pdf}
+\end{frame}
+
 % add explanation about d. build up the figure
 \begin{frame}{Kinematic imprint of a blocking}
   \centering
-  \includegraphics[scale=.75]{fig/dimensionall2016.pdf}
+  \only<1>{\includegraphics[scale=.75]{fig/dimension20160502_002016.pdf}}
+  \only<2>{\includegraphics[scale=.75]{fig/dimension2016_noisochrones.pdf}}
+  \only<3>{\includegraphics[scale=.75]{fig/dimensionall2016.pdf}}
 \end{frame}
 
 % WHY: takeaway + panel 3 + second cross-arrow.

@@ -1,0 +1,87 @@
+% ============================================================
+% fig_dimension.tex -- the dimension heuristic d, built up:
+%   1  diffusion kernel (callback to P1)
+%   2  sum over all pairs -> power law in eps
+%   3  definition of d
+%   4  three point clouds of known d, and the curves
+%
+% Panels are produced by dimension_panels.py into fig/ ;
+% this file only arranges them, so all text is set in the
+% presentation font.
+%
+% Include with:  \input{fig_dimension}   (NOT \include)
+% Requires:      \usepackage{tikz}
+%                \usetikzlibrary{arrows.meta,positioning}
+%
+% Colours are a sequential blue scale, deliberately distinct
+% from the deck's Pone/Ptwo/Pthree paper colours.
+% ============================================================
+
+\definecolor{dimone}{RGB}{116,169,207}
+\definecolor{dimtwo}{RGB}{43,140,190}
+\definecolor{dimthree}{RGB}{2,56,88}
+
+\begin{frame}{Estimating the dimension of a point cloud}
+
+  % ---------- 1-3: the derivation ----------
+  \only<1-3>{%
+    \vfill
+    \begin{columns}
+      \begin{column}{.85\textwidth}
+        Diffusion kernel on the trajectory points, as in P1:
+        \begin{equation*}
+          D(\epsilon)_{ij} \sim
+          \exp\!\left(-\frac{\lVert X_i - X_j\rVert^2}{\epsilon}\right)
+        \end{equation*}
+
+        \onslide<2->{%
+          Summed over all pairs, points filling a
+          $d$-dimensional manifold give
+          \begin{align*}
+            S(\epsilon) := \sum_{i,j}^m D(\epsilon)_{ij}
+            &\approx \sum_{i}^m C \int_{\mathbb{R}^{d}}
+              \exp\!\left(-\frac{\lVert X_i - y\rVert^2}{\epsilon}
+              \right)\dd y \\[-0.1em]
+            &= m\,C\,(\pi\epsilon)^{d/2}
+            \qquad\Longrightarrow\qquad
+            \log S \approx \tfrac{d}{2}\,\log \epsilon
+            + \mathrm{const}
+          \end{align*}}
+
+        \onslide<3->{%
+          \begin{equation*}
+            \boxed{\;d := 2 \max_{\epsilon>0}
+              \frac{\partial \log S(\epsilon)}
+                   {\partial \log \epsilon}\;}
+          \end{equation*}}
+      \end{column}
+    \end{columns}
+    \vfill}
+
+  % ---------- 4: the examples ----------
+  \only<4>{%
+    \centering
+    {\footnotesize $d = 2 \max_{\epsilon>0}
+      \partial \log S(\epsilon) / \partial \log \epsilon$\par}
+     \vspace{.5cm}
+    \begin{tikzpicture}[
+        every node/.style={inner sep=0pt, outer sep=0pt},
+        lbl/.style={font=\footnotesize},
+        flow/.style={-{Stealth[length=1.5mm]}, gray!70, thick}]
+
+      % clouds of known intrinsic dimension
+      \node (c1) at (-3.35,2.05) {\includegraphics{fig/cloud_d1.pdf}};
+      \node (c2) at ( 0.00,2.05) {\includegraphics{fig/cloud_d2.pdf}};
+      \node (c3) at ( 3.35,2.05) {\includegraphics{fig/cloud_d3.pdf}};
+
+      \node[lbl, text=dimone,   above=0pt of c1] {$d=1$};
+      \node[lbl, text=dimtwo,   above=0pt of c2] {$d=2$};
+      \node[lbl, text=dimthree, above=0pt of c3] {$d=3$};
+
+      % kernel sum, then its log-log slope
+      \node (ks) at (-3.5,-1.5) {\includegraphics{fig/kernel_sum.pdf}};
+      \node (sl) at ( 3.5,-1.5) {\includegraphics{fig/slope.pdf}};
+
+      \draw[flow] (ks.east) -- (sl.west);
+    \end{tikzpicture}}
+\end{frame}
