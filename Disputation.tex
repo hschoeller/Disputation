@@ -611,28 +611,43 @@
 % WHY: takeaway + panel 2 + first cross-arrow + transition.
 % SAY: "To summarize, perturbing the observations and 
 % parametrizations uncovers that assimilation uncertainty is flow-
-%   dependent -- and independent of the unstable subspace.
+%   dependent -- and independent of the unstable subspace of the atmospheric 
+% system.
 %   That's the first connection between the panels. For the WRs we have seen 
 % that forecast and assimilation uncertainty do not coincide, but for the 
 % WCBs that was actually the case. Given that WCBs appear to be uncertain both
 % wrt their observation and their dynamics, the next presented paper deals 
-% with how they can robustly defined as spatio-temporally extended objects."
+% with how they can robustly defined as spatio-temporally extended objects.
+% And since WCBs are usually defined by the air they transport, we will now
+% transition from a Eulerian to a Lagrangian perspective."
 \begin{frame}{}
   \centering
   \synthstate{2}
 \end{frame}
 
 % ============================================================
-% PAPER 3 -- PHYSICAL SPACE (~5.5 min)
+% PAPER 3 -- PHYSICAL SPACE (~12 min)
 % ============================================================
 
 % WHY: the gap slide; concrete contrast a non-reader can hold.
-% SAY: "Everything so far looked at fields -- Eulerian
-%   snapshots. But a block is made of air. Two blocks can look
-%   identical in a blocking index and be built completely
-%   differently: one recirculating the same air for days, one
-%   flushing air straight through. Indices cannot tell them
-%   apart; trajectories can."
+% SAY: "I want to illustrate what I mean by "spatio-temporally extended
+% objects" using a case study. This plot displays a particularly potent 
+% blocking system whose extent is defined by upper level PV anomalies and 
+% indicated here with the magenta contours. The presence of a strong upstream
+% surface cyclone shown by yellow contours suggests the presence of a WCB, 
+% which can be tested by tracing the air parcels the blocking consists of 
+% backward in time. The bottom plot reveals that there are indeed a large
+% number of air parcels that that have perform an ascent of the order 
+% typically only seen in WCBs across the three days prior to arrival in the
+% blocking. Previous studies have assessed the influence of WCBs on blockings
+% based on criteria for individual trajectories. While certainly sufficient 
+% for most research purposes, this approach does depend on subjective choices 
+% for thresholds and variables and, furthermore, falls short of conceiving 
+% individuals WCBs as coherent geometric objects consisting of many air
+% parcels. For example, this is why in WCB climatologies you will never find
+% numbers of 
+% WCBs but rather numbers of WCB trajectories or frequency of days associated
+% with WCBs.  "
 \begin{frame}{The Lagrangian perspective}
 \centering
 % remove wind, title
@@ -655,6 +670,10 @@
 }
 \end{frame}
 
+% SAY: "The third paper therefore asks: What can be learned by considering
+% coherent air masses rather than individual trajectories in the analysis of 
+% WCBs? But how to define such coherent air masses in the first place?
+
 \begin{frame}{}
   \centering
   \Huge
@@ -664,15 +683,26 @@
 
 % WHY: method in one intuition; the "perturb the air parcels"
 %   sentence is the toolkit link.
-% SAY: "So: seed the block with thousands of air parcels,
-%   advect them with reanalysis winds -- and now the toolkit
-%   move: jiggle the parcel positions with noise and ask which
-%   groups of trajectories stay together REGARDLESS. Those
-%   perturbation-robust bundles are coherent sets. The
-%   construction is scale-invariant and works in any metric
-%   space -- the same diffusion-map machinery, incidentally,
-%   as the Markov chain of paper one. Robustness to noise is
-%   the DEFINITION of the object, not a nuisance to control."
+% SAY: "The answer is to again use small ramdom peturbations to test spatial
+% integrity of the subjected sets of trajectories. To that end, we 
+% apply a similar diffusion-based algorithm as in the first presented paper, 
+% just in physical space rather than in state space. And just like in the 
+% first paper, the dynamics are expressed in the trajectories and we thus do
+% not need access to them. Mathematically, we
+% are looking for "coherent sets", which are defined as tight bundles of 
+% trajectories that remain close under small perturbations. So if we apply 
+% the forward operator of the flow phi, then apply some diffusion of strength
+% epsilon and then apply the backward transform, we should obtain approximately
+% the same set. This might seem a little abstract, so consider these two sets
+% subjected to a flow. We apply the forward operator -- it seems like this
+% particular flow
+% is a moving vortex; we then apply some small diffusion, by which we obtain 
+% the red points. Finally, if we apply the inverse of the flow, we see that 
+% one of the two sets has stayed largely intact, while the other 
+% has been dispersed. The black set is therefore considered a coherent set,
+% while the gray one is not. The only difference in our case is that we 
+% do not deal in continuous space as suggested here, so we again construct this
+% operation as a Markov chain on the set of points given by the trajectories."
 \begin{frame}{Coherent sets}
   \begin{itemize}
     \item<1-> Sets of trajectories that are robust to perturbations
@@ -685,6 +715,51 @@
   \only<7->{\par\smallskip
   {\tiny adapted from Banisch \& Koltai (2017)}}
 \end{frame}
+
+% SAY: "This plot shows the result of applying this method to the previously
+% introduced test case. The air masses in the blocking region are shown at the
+% initialization time over the west coast of Canada on the left of the plot. 
+% Their position three days before is shown by the point cloud to its right. 
+% The colouring defines the different identified coherent sets, with their
+% mean horizontally projected pathway drawn on the projected map. 
+% The sets clearly have different histories and end up in different parts of 
+% the eventual block. But not only do they differ in terms of their position --
+% which is somewhat expected given this information is entered into the
+% algorithm. They also differ in terms of their dynamical properties like their
+% moisture content and precipitation or their associated latent heating 
+% as can be seen in this plot. While most sets feature little latent heating or
+% even radiative cooling, it is the blue and the red sets that can be 
+% identified as belonging to WCBs due to their substantial cross-isentropic
+% ascent. The 
+% applied coherent set perspective proves useful here because it reveals that
+% there are actually two quite distinct ascent phases roughly 24 hours apart, 
+% a distinction that would have been lost if the analysis was based on 
+% individual trajectories. 
+% We can extend this kind of anaylsis across the whole life cycle of the block.
+% The individual lines are the same as in the previous plot, now coloured
+% according to their initialization time (or equivalently their arrival time). 
+% The grey bars defined by the right axes indicate what proportion of the
+% blocking's air masses is
+% associated with WCBs at each point in time as a proxy for their influence.
+% Once we fill in the results from trajectories intitialized at different times
+% we can study the distinct ascent histories of the coherent air parcel sets 
+% and a few important patterns emerge.
+% Firstly, several sets of air masses ascend at the same Eulerian
+% point in time, evidently conveyed by the same wind field patterns; by the 
+% same conveyor belts. And the stronger and bigger the WCB, the more coherent
+% sets will be subject to its influence.  
+% Secondly, the WCB influence is intermittent
+% due to the presence or absence of surface cyclones and their fronts upstream
+% of the block. This has relevant ramifications because the exerted
+% strengthening of the block by these air masses plays a crucial role in its
+% persistence and, by extension, the large-scale
+% flow field.
+% Finally, the importance of WCBs diminishes towards the end of the block's
+% life cycle as fewer and coherent air masses are conveyed into it -- a result
+% consistent with existing literature. But the presented methodology not only
+% enables a partitioning of the available trajectories into coherent sets, 
+% but also provides valuable insights into the geometric nature of the 
+% trajed point cloud as a whole.
 
 \begin{frame}{WCBs as coherent sets}
 \centering
@@ -732,8 +807,8 @@
                   \begin{itemize}
           \item Coherent air streams differ dynamically
           \item WCBs identified by latent heating
-          \item WCB influence is intermittent
           \item Clustering by coherence uncovers distinct ascent histories
+        \item WCB influence is intermittent
         \end{itemize}
     \end{column}
   \end{columns}}
@@ -743,38 +818,138 @@
 
 % WHY: headline P3; the life-cycle narrative, concretely on
 %   one named case.
-% SAY: "Applied to [the <<< ADAPT: which case study/event you
-%   foreground>>> block]: during onset and maturity, a
-%   coherent core -- the same air masses staying together in a
-%   three-dimensional configuration for days. And a
-%   three-dimensionally persistent air mass tells us the flow
-%   embedding it behaves nearly two-dimensionally: the
-%   equivalent-barotropic structure of a healthy block. Then,
-%   before decay, the coherence breaks down: the sets
-%   fragment, and the apparent geometric dimension of the
-%   traced air masses drops. The material anatomy accompanies
-%   the death of the block."
+% SAY: "Recall the definition of the diffusion kernel D with diffusion 
+% bandwidth epsilon. The sum over all pairs of points depends monotoniccaly 
+% on this bandwidth as an increasing epsilon will enable the points to "see"
+% more of their neighbours. A very small epsilon will result in D equating to 
+% 1 if the points are identical and 0 else such that S will equal to m the 
+% number of points. For epsilon sufficiently large, D will equate to 1 for all
+% points and
+% S will saturate to m times m.
+% Now, given sufficiently many points, this sum
+% approximates the Riemannian integral of this diffusion kernel over the 
+% manifold the points are sampled from. And because the integral of this
+% function depends on the dimension of this underlying manifold, we can derive
+% a heuristic estimate of the dimension of the point cloud within our 
+% existing framework, by measuring how fast this sum goes from m to m^2.
+% Let me illustrate this a bit for one, two and three
+% dimensions. Because a doubling of epsilon will double, quadruple and
+% octuple the number of points within the diffusion kernel of a given points, 
+% the associated sum will also increase by a factor of 2, 4 and 8 respectively.
+% We can therefore estimate the dimension of the point cloud by 
+% measuring the slope of the sum S against epsilon on a log-log scale, though
+% boundary effects limit how close to the actual dimension this heuristic 
+% estimate can get."
 
 \input{tikz/fig_dimension}
 
+% SAY: Let's apply this to our blocking case study. These curves belong to 
+% the trajectories initialized at the blocking's location shown in
+% familar inset. The bright blue and orange lines correspond to the point 
+% clouds location three days before and after initialization respectively and
+% have roughly the same slope and therefore estimate a similar dimension. 
+% The dark red curve on the other hand corresponds to the initialization 
+% configuration with a steeper slope, which makes sense, since the points are
+% ordered in a regular three-dimensional manner. The slope is hard to assess
+% with the naked eye, which is why the heuristic is plotted in 
+% a heatmap for this example in the following plot.
+
 \begin{frame}{Kinematic imprint of a blocking}
-  \centering
-  \includegraphics[scale=.75]{../Thesis/fig/NPG/f03.pdf}
+  \only<1->{\centering
+  \includegraphics[scale=.75]{../Thesis/fig/NPG/f03.pdf}}
+  \only<2->{\begin{itemize}
+    \item<2-> $t=0$: Initialization time, highest dimension
+    \item<3-> $t= \pm 3$: Three days before and after, lower dimension
+  \end{itemize}}
 \end{frame}
 
-% add explanation about d. build up the figure
+% SAY: In a completely 
+% random and structureless flow, one would expect that sheer exerted by the
+% flow on the point cloud would lead to a symmetric decrease in d away from the
+% intialization time. For the set of trajectories considered here, however,
+% the decrease is asymmetric and non-monotonic and this goes for the sets of
+% trajectories initialized at any point in the lifecycle of the blocking.
+% In fact the dimensino of the point cloud and therefore its geometric 
+% structure is intricately linked to the dynamics of the blcokgin across its
+% lifecycle. There are apparently phases where trajectory sets remain coherent 
+% and therefore exhibit a higher dimension d. I want to draw you attention in
+% particular to this staircase like pattern on the bottom right of the heat
+% map to explain how this comes about. If I add isochrones to the plot -- 
+% lines of equal Eulerian time --  it becomes apparent that points clouds 
+% belonging to trajectories initialized at separate times undergo sheer at 
+% a common Eulerian time and this point in time coincides ostensibly with the 
+% decay of the blocking. An atmospheric blocking leaves a kinematic imprint 
+% on the air masses in its region of influence and this is detectable with the 
+% presented methodology. In addition, this influence is lifecycle dependent 
+% and therefore presents a further link between the dimensionality of 
+% the blocking system and its persistence, which brings me to this
+% presentations conclusion.   
+
 \begin{frame}{Kinematic imprint of a blocking}
   \centering
-  \only<1>{\includegraphics[scale=.75]{fig/dimension20160502_002016.pdf}}
-  \only<2>{\includegraphics[scale=.75]{fig/dimension2016_noisochrones.pdf}}
-  \only<3>{\includegraphics[scale=.75]{fig/dimensionall2016.pdf}}
+  \only<1-2>{\includegraphics[scale=.75]
+    {fig/dimension20160502_002016.pdf}}%
+  \only<3>{\includegraphics[scale=.75]
+    {fig/dimension2016_noisochrones.pdf}}%
+  \only<4-5>{\includegraphics[scale=.75]
+    {fig/dimensionall2016.pdf}}%
+\only<7->{%
+  \begin{tikzpicture}
+    \node[anchor=center,inner sep=0] (main)
+      {\includegraphics[scale=.75]{fig/dimensionall2016.pdf}};
+
+    \node[anchor=west,inner sep=0] (s1)
+      at ($(main.east)+(2.5,2.5)$)
+      {\includegraphics[scale=.4]
+        {fig/synpv2016_no_titles_00.pdf}};
+    \node[anchor=west,inner sep=0] (s2)
+      at ($(main.east)+(2,0.75)$)
+      {\includegraphics[scale=.4]
+        {fig/synpv2016_no_titles_04.pdf}};
+    \node[anchor=west,inner sep=0] (s3)
+      at ($(main.east)+(1.5,-1)$)
+      {\includegraphics[scale=.4]
+        {fig/synpv2016_no_titles_08.pdf}};
+
+    % Points on the main time series where t = 00, 04, 08 h.
+    % <<< ADAPT: fractions along main's bounding box (0 = left
+    % edge, 1 = right edge) -- calibrate to your real x-axis,
+    % same technique as the CdV fixed-point leaders.
+    \coordinate (p1) at
+      ($(main.north east)!0.1!(main.south east) + (-0.2,0)$);
+    \coordinate (p2) at
+      ($(main.north east)!0.2!(main.south east)+ (-0.2,0)$);
+    \coordinate (p3) at
+      ($(main.north east)!0.3!(main.south east)+ (-0.2,0)$);
+
+    \draw[-{Stealth[length=2mm]}, thick, gray!70!black]
+      (s1.west) to[bend right=12] (p1);
+    \draw[-{Stealth[length=2mm]}, thick, gray!70!black]
+      (s2.west) to[bend right=12] (p2);
+    \draw[-{Stealth[length=2mm]}, thick, gray!70!black]
+      (s3.west) -- (p3);
+  \end{tikzpicture}%
+}
+
+  \begin{itemize}
+    \item<1-> Highest dimension at initialization ($t=0$); sheer disperses and reduces dimension
+    \item<3-> But asymmetrically and highly variable across lifecycle
+    \item<6-> Dimension tracks coherence; hallmark of a blocking's life cycle
+  \end{itemize}
 \end{frame}
 
 % WHY: takeaway + panel 3 + second cross-arrow.
-% SAY: "Perturb the air parcels: blocks have a material
-%   anatomy, and its dimension marks the life cycle -- the
-%   same dimension-persistence connection we met in state
-%   space, now in physical space."
+% SAY: "We have perturb the air parcels travelling through a blocking 
+% to uncover that blocks have a material
+%   anatomy, and its dimension marks the life cycle -- and additional
+%   dimension-persistence connection to the one we met in state
+%   space. We have also seen that we can analyzing WCBs based on coherent sets 
+% thereby consistently guarding against the uncertainties inherent to WCBs
+% both with respect to their dynamics and their observation. To summarize
+% the insights connected between the three papers,,
+% I would argue that uncerainty and dimensionality are not obstacles to be
+% suppressed but rather diagnostic tools that help us understand how the 
+% atmosphere behaves. Thank you for your attention."
 \begin{frame}{}
   \centering
   \only<1>{\synthstate{3}}
@@ -879,6 +1054,43 @@
     \left[Q(\sigma)^k\right]_{ij}\cdot\Delta t
     \quad : \quad \text{expected regime lifetime}
   \end{align*}
+\end{frame}
+
+\begin{frame}{Estimating the dimension of a point cloud}
+    % ---------- 1-3: the derivation ----------
+  \only<1-3>{%
+    \vfill
+    \begin{columns}
+      \begin{column}{.85\textwidth}
+        Diffusion kernel on the trajectory points, as in P1:
+        \begin{equation*}
+          D(\epsilon)_{ij} \sim
+          \exp\!\left(-\frac{\lVert X_i - X_j\rVert^2}{\epsilon}\right)
+        \end{equation*}
+
+        \onslide<2->{%
+          Summed over all pairs, points filling a
+          $d$-dimensional manifold give
+          \begin{align*}
+            S(\epsilon) := \sum_{i,j}^m D(\epsilon)_{ij}
+            &\approx \sum_{i}^m C \int_{\mathbb{R}^{d}}
+              \exp\!\left(-\frac{\lVert X_i - y\rVert^2}{\epsilon}
+              \right)\dd y \\[-0.1em]
+            &= m\,C\,(\pi\epsilon)^{d/2}
+            \qquad\Longrightarrow\qquad
+            \log S \approx \tfrac{d}{2}\,\log \epsilon
+            + \mathrm{const}
+          \end{align*}}
+
+        \onslide<3->{%
+          \begin{equation*}
+            \boxed{\;d := 2 \max_{\epsilon>0}
+              \frac{\partial \log S(\epsilon)}
+                   {\partial \log \epsilon}\;}
+          \end{equation*}}
+      \end{column}
+    \end{columns}
+    \vfill}
 \end{frame}
 
 % <<< ADAPT: remaining backup frames (week-3 task); planned

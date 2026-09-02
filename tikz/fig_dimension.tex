@@ -23,32 +23,25 @@
 
 \begin{frame}{Estimating the dimension of a point cloud}
 
-  % ---------- 1-3: the derivation ----------
+  % ---------- 4: the examples ----------
   \only<1-3>{%
     \vfill
     \begin{columns}
       \begin{column}{.85\textwidth}
-        Diffusion kernel on the trajectory points, as in P1:
+        Diffusion kernel on the point cloud:
         \begin{equation*}
           D(\epsilon)_{ij} \sim
           \exp\!\left(-\frac{\lVert X_i - X_j\rVert^2}{\epsilon}\right)
         \end{equation*}
 
         \onslide<2->{%
-          Summed over all pairs, points filling a
-          $d$-dimensional manifold give
+          Summed over all pairs
           \begin{align*}
             S(\epsilon) := \sum_{i,j}^m D(\epsilon)_{ij}
-            &\approx \sum_{i}^m C \int_{\mathbb{R}^{d}}
-              \exp\!\left(-\frac{\lVert X_i - y\rVert^2}{\epsilon}
-              \right)\dd y \\[-0.1em]
-            &= m\,C\,(\pi\epsilon)^{d/2}
-            \qquad\Longrightarrow\qquad
-            \log S \approx \tfrac{d}{2}\,\log \epsilon
-            + \mathrm{const}
           \end{align*}}
 
         \onslide<3->{%
+        Sum $\leftrightarrow$ integral over sampled manifold, whose dimension is 
           \begin{equation*}
             \boxed{\;d := 2 \max_{\epsilon>0}
               \frac{\partial \log S(\epsilon)}
@@ -57,8 +50,7 @@
       \end{column}
     \end{columns}
     \vfill}
-
-  % ---------- 4: the examples ----------
+  
   \only<4>{%
     \centering
     {\footnotesize $d = 2 \max_{\epsilon>0}
