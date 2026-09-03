@@ -56,7 +56,7 @@
     \path[use as bounding box] (0,0) rectangle (10.25,5.25);
 
     % ---------- 1: top-left -- t0, unperturbed ----------
-    \csstep{4-}{%
+    \csstep{3-}{%
       \begin{scope}[shift={(0,2.75)}]
         \panelframe
         \fill[black]    (1.246,1.048) circle (0.205);
@@ -64,7 +64,7 @@
       \end{scope}}
 
     % ---------- 2: top-right -- t1, unperturbed ----------
-    \csstep{5-}{%
+    \csstep{4-}{%
       \begin{scope}[shift={(5.25,2.75)}]
         \panelframe
         \begin{scope}[shift={(3.211,1.034)}]
@@ -76,7 +76,7 @@
       \end{scope}}
 
     % ---------- 3: bottom-right -- t1, with ensemble ----------
-    \csstep{6-}{%
+    \csstep{5-}{%
       \begin{scope}[shift={(5.25,0)}]
         \panelframe
         \begin{scope}[shift={(3.211,1.034)}]
@@ -94,7 +94,7 @@
       \end{scope}}
 
     % ---------- 4: bottom-left -- t0, with ensemble ----------
-    \csstep{7-}{%
+    \csstep{6-}{%
       \begin{scope}[shift={(0,0)}]
         \panelframe
         \fill[black]    (1.246,1.048) circle (0.205);
